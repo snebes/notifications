@@ -1,0 +1,13 @@
+language: php
+php:
+    - '7.1'
+    - '7.2'
+    - '7.3'
+before_install:
+    - composer selfupdate
+install:
+    - composer install --prefer-dist --no-interaction $COMPOSER_FLAGS
+script:
+    - phpunit --configuration phpunit.xml.dist --coverage-text
+notifications:
+    email: 'steve+travis@nebes.net'

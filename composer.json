@@ -1,0 +1,32 @@
+{
+    "name": "snebes/notifications",
+    "description": "Notification library",
+    "type": "library",
+    "require-dev": {
+        "phpunit/phpunit": "^8.0"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Steve Nebes",
+            "email": "steve@nebes.net"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "SN\\Notifications\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
+    },
+    "minimum-stability": "stable",
+    "require": {
+        "php": ">=7.1.3",
+        "doctrine/orm": "^2.6",
+        "doctrine/collections": "^1.6",
+        "symfony/event-dispatcher": "^4.2"
+    }
+}
