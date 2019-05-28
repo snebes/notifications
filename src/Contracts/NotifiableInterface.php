@@ -12,4 +12,12 @@ namespace SN\Notifications\Contracts;
 
 interface NotifiableInterface
 {
+    /**
+     *
+     *
+     * @param string                     $channel
+     * @param NotificationInterface|null $notification
+     * @return mixed
+     */
+    public function routeNotificationFor(string $channel, NotificationInterface $notification = null);
 }

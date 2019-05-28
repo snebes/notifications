@@ -10,20 +10,22 @@ declare(strict_types=1);
 
 namespace SN\Notifications\Model;
 
+use SN\Notifications\Contracts\NotificationInterface;
+
 /**
  * Maps the notifiables' fields for the $channel.
  *
- * @property string $email
+ * @method getEmail(): string
  * @property string $phoneNumber
  */
 trait RoutesNotificationsTrait
 {
     /**
-     * @param string $channel
-     * @param mixed  $notification
+     * @param string                $channel
+     * @param NotificationInterface $notification
      * @return mixed
      */
-    public function routeNotificationFor(string $channel, $notification = null)
+    public function routeNotificationFor(string $channel, NotificationInterface $notification = null)
     {
         $method = 'routeNotificationFor' . \ucfirst($channel);
 
@@ -35,9 +37,7 @@ trait RoutesNotificationsTrait
             case 'database':
                 return $this->getNotifications();
             case 'mail':
-                return $this->email;
-            case 'sms':
-                return $this->phoneNumber;
+                return $this->getEmail();
         }
 
         return null;
