@@ -10,7 +10,6 @@ declare(strict_types=1);
 
 namespace SN\Notifications\Channel;
 
-use Doctrine\Common\Collections\Collection;
 use SN\Notifications\Contracts\ChannelInterface;
 use SN\Notifications\Contracts\NotifiableInterface;
 use SN\Notifications\Contracts\NotificationInterface;
@@ -24,14 +23,12 @@ class DatabaseChannel implements ChannelInterface
      */
     public function send(NotifiableInterface $notifiable, NotificationInterface $notification)
     {
-        $dbNotification = $notification->getDatabaseNotification();
-
-        if (null === $dbNotification) {
-            return;
+        if (!\method_exists($notification, 'getDatabaseNotification')) {
+            return null;
         }
 
-        /** @var Collection $notificationCollection */
-        $notificationCollection = $notifiable->routeNotificationFor(static::class, $notification);
+        $dbNotification = $notification->getDatabaseNotification($notifiable);
 
+        return $dbNotification;
     }
 }

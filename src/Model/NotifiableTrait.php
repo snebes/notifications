@@ -12,5 +12,5 @@ namespace SN\Notifications\Model;
 
 trait NotifiableTrait
 {
-    use HasDatabaseNotificationsTrait, RoutesNotificationsTrait;
+    use DatabaseNotificationsTrait, RoutesNotificationsTrait;
 }

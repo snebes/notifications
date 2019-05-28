@@ -14,23 +14,16 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\Common\Collections\Selectable;
-use Doctrine\ORM\Mapping as ORM;
-use SN\Notifications\Entity\DatabaseNotification;
 
-trait HasDatabaseNotificationsTrait
+/**
+ * @property $notifications
+ */
+trait DatabaseNotificationsTrait
 {
-    /**
-     * @var DatabaseNotification[]
-     *
-     * @ORM\OneToMany(targetEntity=DatabaseNotification::class, cascade={"persist", "remove"}, fetch=EXTRA_LAZY)
-     * @ORM\OrderBy({"createdAt" = "DESC"})
-     */
-    protected $notifications;
-
     /**
      * Get the entitys' notifications.
      *
-     * @return Collection|DatabaseNotification[]
+     * @return Collection
      */
     public function getNotifications(): Collection
     {
@@ -42,7 +35,7 @@ trait HasDatabaseNotificationsTrait
     /**
      * Get the entitys' read notifications.
      *
-     * @return DatabaseNotification[]
+     * @return array
      */
     public function getReadNotifications(): array
     {
@@ -58,7 +51,7 @@ trait HasDatabaseNotificationsTrait
     /**
      * Get the entitys' unread notifications.
      *
-     * @return DatabaseNotification[]
+     * @return array
      */
     public function getUnreadNotifications(): array
     {

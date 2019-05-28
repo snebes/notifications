@@ -16,6 +16,7 @@ use SN\Notifications\Contracts\NotificationInterface;
 /**
  * Maps the notifiables' fields for the $channel.
  *
+ * @method getNotifications(): Collection
  * @method getEmail(): string
  */
 trait RoutesNotificationsTrait
@@ -27,12 +28,6 @@ trait RoutesNotificationsTrait
      */
     public function routeNotificationFor(string $channel, NotificationInterface $notification = null)
     {
-        $method = 'routeNotificationFor' . \ucfirst($channel);
-
-        if (\method_exists($this, $method)) {
-            return $this->{$method}($notification);
-        }
-
         switch ($channel) {
             case DatabaseChannel::class:
                 return $this->getNotifications();

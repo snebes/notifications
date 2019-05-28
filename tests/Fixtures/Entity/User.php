@@ -8,14 +8,14 @@
 
 declare(strict_types=1);
 
-namespace SN\Notifications\Entity;
+namespace Tests\Fixtures\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity()
  */
-class DatabaseNotification
+class User
 {
     /**
      * @var int
@@ -26,5 +26,11 @@ class DatabaseNotification
      */
     private $id;
 
-//    private
+    /**
+     * @return int
+     */
+    public function getId(): int
+    {
+        return $this->id ?? 0;
+    }
 }

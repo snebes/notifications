@@ -17,7 +17,7 @@ use SN\Notifications\Contracts\NotificationInterface;
 use SN\Notifications\Events\NotificationFailedEvent;
 use SN\Notifications\Events\NotificationSendingEvent;
 use SN\Notifications\Events\NotificationSentEvent;
-use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class NotificationSender
 {

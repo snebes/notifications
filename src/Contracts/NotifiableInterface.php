@@ -13,7 +13,7 @@ namespace SN\Notifications\Contracts;
 interface NotifiableInterface
 {
     /**
-     *
+     * Get the notification routing information for the given channel.
      *
      * @param string                     $channel
      * @param NotificationInterface|null $notification
