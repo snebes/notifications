@@ -19,6 +19,11 @@ use SN\Notifications\Events\NotificationSendingEvent;
 use SN\Notifications\Events\NotificationSentEvent;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
+/**
+ * Class NotificationSender
+ *
+ * @package SN\Notifications
+ */
 class NotificationSender
 {
     /**
