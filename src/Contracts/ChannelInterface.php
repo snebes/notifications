@@ -18,6 +18,7 @@ interface ChannelInterface
     /**
      * @param NotifiableInterface $notifiable
      * @param mixed               $notification
+     * @return mixed
      */
-    public function send(NotifiableInterface $notifiable, $notification): void;
+    public function send(NotifiableInterface $notifiable, $notification);
 }

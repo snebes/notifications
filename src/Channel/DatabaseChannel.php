@@ -16,18 +16,12 @@ use SN\Notifications\Contracts\NotifiableInterface;
 
 class DatabaseChannel implements ChannelInterface
 {
-    private $em;
-
-    public function __construct(RegistryInterface $registry)
-    {
-
-    }
-
     /**
      * @param NotifiableInterface $notifiable
      * @param mixed               $notification
+     * @return mixed
      */
-    public function send(NotifiableInterface $notifiable, $notification): void
+    public function send(NotifiableInterface $notifiable, $notification)
     {
         $dbNotification = $notification->getDatabaseNotification();
 

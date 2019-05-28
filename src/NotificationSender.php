@@ -12,6 +12,10 @@ namespace SN\Notifications;
 
 use SN\Notifications\Contracts\ChannelInterface;
 use SN\Notifications\Contracts\NotifiableInterface;
+use SN\Notifications\Contracts\NotificationInterface;
+use SN\Notifications\Events\NotificationFailedEvent;
+use SN\Notifications\Events\NotificationSendingEvent;
+use SN\Notifications\Events\NotificationSentEvent;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 class NotificationSender
@@ -20,8 +24,6 @@ class NotificationSender
      * @var ChannelInterface[]
      */
     private $channels;
-
-    private $bus;
 
     /**
      * @var EventDispatcherInterface
@@ -35,9 +37,9 @@ class NotificationSender
 
     /**
      * @param NotifiableInterface|NotifiableInterface[] $notifiables
-     * @param mixed                                     $notification
+     * @param NotificationInterface                     $notification
      */
-    public function send($notifiables, $notification): void
+    public function send($notifiables, NotificationInterface $notification): void
     {
         $this->sendNow($notifiables, $notification);
     }
@@ -58,24 +60,38 @@ class NotificationSender
                 continue;
             }
 
-            foreach ((array) $viaChannels as $channel) {
+            foreach ((array)$viaChannels as $channel) {
                 $this->sendToNotifiable($notifiable, $notification, $channel);
             }
         }
     }
 
     /**
-     * @param NotifiableInterface $notifiable
-     * @param mixed               $notification
-     * @param string              $channel
+     * @param NotifiableInterface   $notifiable
+     * @param NotificationInterface $notification
+     * @param string                $channel
      */
-    private function sendToNotifiable(NotifiableInterface $notifiable, $notification, string $channel): void
-    {
-        // @todo: dispatch sending event.
+    private function sendToNotifiable(
+        NotifiableInterface $notifiable,
+        NotificationInterface $notification,
+        string $channel
+    ): void {
+        $event = new NotificationSendingEvent($notifiable, $notification, $channel);
+        $this->dispatcher->dispatch($event);
 
-        $response = $this->getChannel($channel)->send($notifiable, $notification);
+        if ($event->isPropagationStopped()) {
+            return;
+        }
 
-        // @todo: dispatch sent event.
+        try {
+            $response = $this->getChannel($channel)->send($notifiable, $notification);
+
+            $event = new NotificationSentEvent($notifiable, $notification, $channel, $response);
+            $this->dispatcher->dispatch($event);
+        } catch (\Exception $e) {
+            $event = new NotificationFailedEvent($notifiable, $notification, $channel);
+            $this->dispatcher->dispatch($event);
+        }
     }
 
     /**
@@ -84,14 +100,14 @@ class NotificationSender
      *
      * @throws \Exception
      */
-    private function getChannel(string $channel)
+    private function getChannel(string $channel): ChannelInterface
     {
         switch ($channel) {
             default:
                 break;
         }
 
-        throw new \Exception();
+        throw new \Exception(\sprintf('Invalid channel %s', $channel));
     }
 
     /**
