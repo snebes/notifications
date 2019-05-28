@@ -10,6 +10,7 @@ declare(strict_types=1);
 
 namespace SN\Notifications;
 
+use SN\Notifications\Channel\DatabaseChannel;
 use SN\Notifications\Contracts\ChannelInterface;
 use SN\Notifications\Contracts\NotifiableInterface;
 use SN\Notifications\Contracts\NotificationInterface;
@@ -23,16 +24,39 @@ class NotificationSender
     /**
      * @var ChannelInterface[]
      */
-    private $channels;
+    private $channels = [];
 
     /**
      * @var EventDispatcherInterface
      */
     private $dispatcher;
 
-    public function __construct(EventDispatcherInterface $dispatcher)
+    /**
+     * Default values.
+     *
+     * @param DatabaseChannel          $databaseChannel
+     * @param EventDispatcherInterface $dispatcher
+     */
+    public function __construct(DatabaseChannel $databaseChannel, EventDispatcherInterface $dispatcher)
     {
+        $this->addChannel($databaseChannel);
+
         $this->dispatcher = $dispatcher;
+    }
+
+    /**
+     * @param ChannelInterface $channel
+     * @return self
+     */
+    public function addChannel(ChannelInterface $channel): self
+    {
+        $class = \get_class($channel);
+
+        if (!\array_key_exists($class, $this->channels)) {
+            $this->channels[$class] = $channel;
+        }
+
+        return $this;
     }
 
     /**
@@ -60,7 +84,7 @@ class NotificationSender
                 continue;
             }
 
-            foreach ((array)$viaChannels as $channel) {
+            foreach ((array) $viaChannels as $channel) {
                 $this->sendToNotifiable($notifiable, $notification, $channel);
             }
         }
@@ -102,9 +126,8 @@ class NotificationSender
      */
     private function getChannel(string $channel): ChannelInterface
     {
-        switch ($channel) {
-            default:
-                break;
+        if (\array_key_exists($channel, $this->channels)) {
+            return $this->channels[$channel];
         }
 
         throw new \Exception(\sprintf('Invalid channel %s', $channel));

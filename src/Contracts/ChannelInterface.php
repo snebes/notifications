@@ -16,9 +16,11 @@ namespace SN\Notifications\Contracts;
 interface ChannelInterface
 {
     /**
-     * @param NotifiableInterface $notifiable
-     * @param mixed               $notification
+     * Send the given notification.
+     *
+     * @param NotifiableInterface   $notifiable
+     * @param NotificationInterface $notification
      * @return mixed
      */
-    public function send(NotifiableInterface $notifiable, $notification);
+    public function send(NotifiableInterface $notifiable, NotificationInterface $notification);
 }

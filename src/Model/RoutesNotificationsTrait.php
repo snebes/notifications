@@ -10,13 +10,13 @@ declare(strict_types=1);
 
 namespace SN\Notifications\Model;
 
+use SN\Notifications\Channel\DatabaseChannel;
 use SN\Notifications\Contracts\NotificationInterface;
 
 /**
  * Maps the notifiables' fields for the $channel.
  *
  * @method getEmail(): string
- * @property string $phoneNumber
  */
 trait RoutesNotificationsTrait
 {
@@ -34,7 +34,7 @@ trait RoutesNotificationsTrait
         }
 
         switch ($channel) {
-            case 'database':
+            case DatabaseChannel::class:
                 return $this->getNotifications();
             case 'mail':
                 return $this->getEmail();

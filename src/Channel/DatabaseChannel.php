@@ -13,15 +13,16 @@ namespace SN\Notifications\Channel;
 use Doctrine\Common\Collections\Collection;
 use SN\Notifications\Contracts\ChannelInterface;
 use SN\Notifications\Contracts\NotifiableInterface;
+use SN\Notifications\Contracts\NotificationInterface;
 
 class DatabaseChannel implements ChannelInterface
 {
     /**
-     * @param NotifiableInterface $notifiable
-     * @param mixed               $notification
+     * @param NotifiableInterface   $notifiable
+     * @param NotificationInterface $notification
      * @return mixed
      */
-    public function send(NotifiableInterface $notifiable, $notification)
+    public function send(NotifiableInterface $notifiable, NotificationInterface $notification)
     {
         $dbNotification = $notification->getDatabaseNotification();
 
