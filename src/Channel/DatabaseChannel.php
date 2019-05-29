@@ -19,7 +19,7 @@ class DatabaseChannel implements ChannelInterface
     /**
      * @return string
      */
-    public function getName(): string
+    public static function getName(): string
     {
         return 'database';
     }

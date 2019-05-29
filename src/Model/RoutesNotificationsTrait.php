@@ -11,6 +11,7 @@ declare(strict_types=1);
 namespace SN\Notifications\Model;
 
 use SN\Notifications\Channel\DatabaseChannel;
+use SN\Notifications\Contracts\ChannelInterface;
 use SN\Notifications\Contracts\NotificationInterface;
 
 /**
@@ -28,15 +29,16 @@ trait RoutesNotificationsTrait
      */
     public function routeNotificationFor(string $channel, NotificationInterface $notification = null)
     {
-        if (\class_exists($channel)) {
-            try {
-                $method = 'routeNotificationFor' . (new \ReflectionClass($channel))->getShortName();
+        if (\class_exists($channel) && \in_array(ChannelInterface::class, \class_implements($channel))) {
+            $suffix = \call_user_func([$channel, 'getName']);
+        } else {
+            $suffix = $channel;
+        }
 
-                if (\method_exists($this, $method)) {
-                    return $this->{$method}($notification);
-                }
-            } catch (\ReflectionException $e) {
-            }
+        $method = 'routeNotificationFor' . \ucfirst($suffix);
+
+        if (\method_exists($this, $method)) {
+            return $this->{$method}($notification);
         }
 
         switch ($channel) {

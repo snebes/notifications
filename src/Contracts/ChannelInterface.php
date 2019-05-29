@@ -20,7 +20,7 @@ interface ChannelInterface
      *
      * @return string
      */
-    public function getName(): string;
+    public static function getName(): string;
 
     /**
      * Send the given notification.
