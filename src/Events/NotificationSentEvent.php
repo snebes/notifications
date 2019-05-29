@@ -12,7 +12,7 @@ namespace SN\Notifications\Events;
 
 use SN\Notifications\Contracts\NotifiableInterface;
 use SN\Notifications\Contracts\NotificationInterface;
-use Symfony\Contracts\EventDispatcher\Event;
+use Symfony\Component\EventDispatcher\Event;
 
 class NotificationSentEvent extends Event
 {

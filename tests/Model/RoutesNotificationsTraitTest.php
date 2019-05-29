@@ -10,7 +10,9 @@ declare(strict_types=1);
 
 namespace Tests\Model;
 
+use Doctrine\Common\Collections\Collection;
 use PHPUnit\Framework\TestCase;
+use SN\Notifications\Channel\DatabaseChannel;
 
 class RoutesNotificationsTraitTest extends TestCase
 {
@@ -18,7 +20,8 @@ class RoutesNotificationsTraitTest extends TestCase
     {
         $instance = new RoutesNotificationsInstance();
 
-        $this->assertSame('steve@nebes.net', $instance->routeNotificationFor('mail'));
+        $this->assertInstanceOf(Collection::class, $instance->routeNotificationFor(DatabaseChannel::class));
+//        $this->assertSame('steve@nebes.net', $instance->routeNotificationFor('mail'));
 //        $this->assertSame('555-867-5309', $instance->routeNotificationFor('sms'));
 //        $this->assertSame('bar', $instance->routeNotificationFor('foo'));
     }

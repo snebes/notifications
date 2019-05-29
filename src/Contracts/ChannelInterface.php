@@ -16,6 +16,13 @@ namespace SN\Notifications\Contracts;
 interface ChannelInterface
 {
     /**
+     * Name of the channel.
+     *
+     * @return string
+     */
+    public function getName(): string;
+
+    /**
      * Send the given notification.
      *
      * @param NotifiableInterface   $notifiable

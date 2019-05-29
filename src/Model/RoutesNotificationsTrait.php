@@ -28,6 +28,17 @@ trait RoutesNotificationsTrait
      */
     public function routeNotificationFor(string $channel, NotificationInterface $notification = null)
     {
+        if (\class_exists($channel)) {
+            try {
+                $method = 'routeNotificationFor' . (new \ReflectionClass($channel))->getShortName();
+
+                if (\method_exists($this, $method)) {
+                    return $this->{$method}($notification);
+                }
+            } catch (\ReflectionException $e) {
+            }
+        }
+
         switch ($channel) {
             case DatabaseChannel::class:
                 return $this->getNotifications();

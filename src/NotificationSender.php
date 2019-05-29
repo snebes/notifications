@@ -55,10 +55,10 @@ class NotificationSender
      */
     public function addChannel(ChannelInterface $channel): self
     {
-        $class = \get_class($channel);
+        $key = $channel->getName();
 
-        if (!\array_key_exists($class, $this->channels)) {
-            $this->channels[$class] = $channel;
+        if (!\array_key_exists($key, $this->channels)) {
+            $this->channels[$key] = $channel;
         }
 
         return $this;
@@ -106,7 +106,7 @@ class NotificationSender
         string $channel
     ): void {
         $event = new NotificationSendingEvent($notifiable, $notification, $channel);
-        $this->dispatcher->dispatch($event);
+        $this->dispatcher->dispatch(NotificationSendingEvent::class, $event);
 
         if ($event->isPropagationStopped()) {
             return;
@@ -116,10 +116,10 @@ class NotificationSender
             $response = $this->getChannel($channel)->send($notifiable, $notification);
 
             $event = new NotificationSentEvent($notifiable, $notification, $channel, $response);
-            $this->dispatcher->dispatch($event);
+            $this->dispatcher->dispatch(NotificationSentEvent::class, $event);
         } catch (\Exception $e) {
             $event = new NotificationFailedEvent($notifiable, $notification, $channel);
-            $this->dispatcher->dispatch($event);
+            $this->dispatcher->dispatch(NotificationFailedEvent::class, $event);
         }
     }
 

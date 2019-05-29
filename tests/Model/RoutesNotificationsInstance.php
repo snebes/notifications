@@ -10,11 +10,11 @@ declare(strict_types=1);
 
 namespace Tests\Model;
 
-use SN\Notifications\Model\RoutesNotificationsTrait;
+use SN\Notifications\Model\NotifiableTrait;
 
 class RoutesNotificationsInstance
 {
-    use RoutesNotificationsTrait;
+    use NotifiableTrait;
 
     /**
      * @var string
