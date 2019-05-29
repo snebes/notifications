@@ -16,7 +16,7 @@ use Doctrine\Common\Collections\Criteria;
 use Doctrine\Common\Collections\Selectable;
 
 /**
- * @property $notifications
+ * @property Collection $notifications
  */
 trait DatabaseNotificationsTrait
 {

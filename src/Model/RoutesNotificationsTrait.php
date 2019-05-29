@@ -16,8 +16,8 @@ use SN\Notifications\Contracts\NotificationInterface;
 /**
  * Maps the notifiables' fields for the $channel.
  *
- * @method getNotifications(): Collection
- * @method getEmail(): string
+ * @method getNotifications()
+ * @method getEmail()
  */
 trait RoutesNotificationsTrait
 {

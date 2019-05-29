@@ -139,15 +139,14 @@ class NotificationSender
     }
 
     /**
-     * @param $notifables
+     * @param NotifiableInterface|NotifiableInterface[] $notifiables
      * @return NotifiableInterface[]
      */
-    private function toArray($notifables): array
+    private function toArray($notifiables): array
     {
-        if (!\is_iterable($notifables)) {
-            return [$notifables];
-        }
+        /** @var NotifiableInterface[] $arr */
+        $arr = \is_iterable($notifiables) ?: [$notifiables];
 
-        return $notifables;
+        return $arr;
     }
 }

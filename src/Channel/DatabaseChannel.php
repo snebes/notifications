@@ -17,6 +17,14 @@ use SN\Notifications\Contracts\NotificationInterface;
 class DatabaseChannel implements ChannelInterface
 {
     /**
+     * @return string
+     */
+    public function getName(): string
+    {
+        return 'database';
+    }
+
+    /**
      * @param NotifiableInterface   $notifiable
      * @param NotificationInterface $notification
      * @return mixed
