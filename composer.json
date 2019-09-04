@@ -1,0 +1,15 @@
+{
+    "name": "snebes/notifications",
+    "description": "Notifications component",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Steve Nebes",
+            "email": "steve@nebes.net"
+        }
+    ],
+    "require": {
+        "php": "^7.2"
+    }
+}
