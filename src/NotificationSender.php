@@ -16,6 +16,7 @@ use SN\Notifications\Contracts\ChannelInterface;
 use SN\Notifications\Contracts\NotifiableInterface;
 use SN\Notifications\Contracts\NotificationInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface as EventDispatcherContract;
 use UnexpectedValueException;
 
 class NotificationSender
@@ -84,7 +85,7 @@ class NotificationSender
             }
 
             foreach ($viaChannels as $channel) {
-                $this->sendToNotifiable($notifiable, clone $notifiable, $channel);
+                $this->sendToNotifiable($notifiable, clone $notification, $channel);
             }
         }
     }
@@ -141,14 +142,14 @@ class NotificationSender
      * @param Events\Event $event
      * @param string|null  $eventName
      */
-    private function dispatch(Events\Event $event, string $eventName = null): void
+    protected function dispatch(Events\Event $event, string $eventName = null): void
     {
-        if ($this->dispatcher instanceof EventDispatcherInterface) {
-            // Event dispatcher < 4.3
-            $this->dispatcher->dispatch($eventName, $event);
-        } else {
+        if ($this->dispatcher instanceof EventDispatcherContract) {
             // Event dispatcher 4.3+
             $this->dispatcher->dispatch($event, $eventName);
+        } else {
+            // Event dispatcher < 4.3
+            $this->dispatcher->dispatch($eventName, $event);
         }
     }
 
