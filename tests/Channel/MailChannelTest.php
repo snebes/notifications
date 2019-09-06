@@ -8,15 +8,15 @@
 
 declare(strict_types=1);
 
-namespace SN\Notifications\Tests\Channel;
+namespace Tests\SN\Notifications\Channel;
 
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use SN\Notifications\Channel\MailChannel;
 use SN\Notifications\Contracts\MailerInterface;
-use SN\Notifications\Tests\Fixture\BadMailFixture;
-use SN\Notifications\Tests\Fixture\MailFixture;
-use SN\Notifications\Tests\Fixture\NotifiableFixture;
+use Tests\SN\Notifications\Fixture\BadMailFixture;
+use Tests\SN\Notifications\Fixture\MailFixture;
+use Tests\SN\Notifications\Fixture\NotifiableFixture;
 
 /**
  * @author Steve Nebes <steve@nebes.net>

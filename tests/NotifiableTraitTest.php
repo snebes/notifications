@@ -8,10 +8,10 @@
 
 declare(strict_types=1);
 
-namespace SN\Notifications\Tests;
+namespace Tests\SN\Notifications;
 
 use PHPUnit\Framework\TestCase;
-use SN\Notifications\Tests\Fixture\NotifiableFixture;
+use Tests\SN\Notifications\Fixture\NotifiableFixture;
 
 /**
  * @author Steve Nebes <steve@nebes.net>

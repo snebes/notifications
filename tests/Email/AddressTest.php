@@ -8,7 +8,7 @@
 
 declare(strict_types=1);
 
-namespace SN\Notifications\Tests\Email;
+namespace Tests\SN\Notifications\Email;
 
 use PHPUnit\Framework\TestCase;
 use SN\Notifications\Email\Address;

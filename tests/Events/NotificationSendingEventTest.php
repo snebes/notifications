@@ -8,7 +8,7 @@
 
 declare(strict_types=1);
 
-namespace SN\Notifications\Tests\Events;
+namespace Tests\SN\Notifications\Events;
 
 use PHPUnit\Framework\TestCase;
 use SN\Notifications\Contracts\NotifiableInterface;

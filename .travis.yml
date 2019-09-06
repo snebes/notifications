@@ -2,9 +2,14 @@ language: php
 php:
     - '7.2'
     - '7.3'
-before_install:
-    - composer selfupdate
-install:
-    - composer install --prefer-dist --no-interaction $COMPOSER_FLAGS
+matrix:
+    include:
+        - php: '7.1'
+          env: SYMFONY_VERSION="symfony/lts:^3"
+    fast_finish: true
+before_script:
+    - if [ "$SYMFONY_VERSION" != "" ]; then travis_wait composer require --no-update $SYMFONY_VERSION; fi;
+    - 'composer update --prefer-dist --no-interaction $COMPOSER_FLAGS'
 script:
-    - phpunit --configuration phpunit.xml.dist --coverage-text
+    - 'composer validate --no-check-lock --strict'
+    - 'phpunit --configuration phpunit.xml.dist --coverage-text'

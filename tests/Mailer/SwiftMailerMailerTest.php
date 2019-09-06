@@ -8,7 +8,7 @@
 
 declare(strict_types=1);
 
-namespace SN\Notifications\Tests\Mailer;
+namespace Tests\SN\Notifications\Mailer;
 
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
