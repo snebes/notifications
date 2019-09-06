@@ -95,7 +95,14 @@ class SwiftMailerMailer implements MailerInterface
         $list = [];
 
         foreach ($addresses as $address) {
-            $list[] = $address->getName() ? [$address->getAddress(), $address->getName()] : $address->getAddress();
+            $name = $address->getName();
+            $addr = $address->getAddress();
+
+            if ($name) {
+                $list[$addr] = $name;
+            } else {
+                $list[] = $addr;
+            }
         }
 
         return $list;

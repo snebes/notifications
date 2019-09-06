@@ -41,6 +41,18 @@ class NotifiableTraitTest extends TestCase
         $instance = new NotifiableInstance();
         $this->assertNull($instance->routeNotificationFor('baz'));
     }
+
+    public function testDatabaseReadNotifications(): void
+    {
+        $instance = new NotifiableInstance();
+        $this->assertCount(0, $instance->getReadNotifications());
+    }
+
+    public function testDatabaseUnreadNotifications(): void
+    {
+        $instance = new NotifiableInstance();
+        $this->assertCount(0, $instance->getUnreadNotifications());
+    }
 }
 
 class NotifiableInstance

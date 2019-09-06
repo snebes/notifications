@@ -53,9 +53,9 @@ class NotificationFailedEvent extends Event
         string $channel
     ) {
         $this->exception = $exception;
-        $this->notifiable = $notifiable;
-        $this->notification = $notification;
-        $this->channel = $channel;
+        $this->setNotifiable($notifiable);
+        $this->setNotification($notification);
+        $this->setChannel($channel);
     }
 
     /**

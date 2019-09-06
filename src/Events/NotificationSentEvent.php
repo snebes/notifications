@@ -52,10 +52,10 @@ class NotificationSentEvent extends Event
         string $channel,
         $response = null
     ) {
-        $this->notifiable = $notifiable;
-        $this->notification = $notification;
-        $this->channel = $channel;
-        $this->response = $response;
+        $this->setNotifiable($notifiable);
+        $this->setNotification($notification);
+        $this->setChannel($channel);
+        $this->setResponse($response);
     }
 
     /**

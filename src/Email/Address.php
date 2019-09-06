@@ -10,8 +10,6 @@ declare(strict_types=1);
 
 namespace SN\Notifications\Email;
 
-use PharIo\Manifest\InvalidApplicationNameException;
-
 /**
  * @author Steve Nebes <steve@nebes.net>
  */
@@ -86,7 +84,7 @@ final class Address
 
         $type = \is_object($address) ? \get_class($address) : \gettype($address);
 
-        throw new InvalidApplicationNameException(
+        throw new \InvalidArgumentException(
             \sprintf('An address can be an instance of Address or a string, ("%s") given.', $type));
     }
 

@@ -43,7 +43,9 @@ class DatabaseChannel implements ChannelInterface
         $entity = new Notification();
         $entity->setData($this->getData($notifiable, $notification));
 
-        return $notifiable->routeNotificationFor('database', $notification)->add($entity);
+        $notifiable->routeNotificationFor('database', $notification)->add($entity);
+
+        return $entity;
     }
 
     /**

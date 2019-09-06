@@ -61,13 +61,19 @@ class MailChannel implements ChannelInterface
             throw new \RuntimeException('Notification is missing toMail method.');
         }
 
-        if (!$notifiable->routeNotificationFor('mail', $notification)) {
+        $toEmail = $notifiable->routeNotificationFor('mail', $notification);
+
+        if (!$toEmail) {
             return null;
         }
 
         $email = $notification->toMail($notifiable);
 
         if ($email instanceof EmailInterface) {
+            if (empty($email->getTo())) {
+                $email->to($toEmail);
+            }
+
             return $this->mailer->send($email);
         }
 

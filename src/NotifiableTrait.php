@@ -21,7 +21,7 @@ use SN\Notifications\Contracts\NotificationInterface;
  */
 trait NotifiableTrait
 {
-    use HasDatabaseNotifications;
+    use HasDatabaseNotificationsTrait;
 
     /**
      * Get the notification routing information for the given channel.

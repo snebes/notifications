@@ -42,9 +42,9 @@ class NotificationSendingEvent extends Event
      */
     public function __construct(NotifiableInterface $notifiable, NotificationInterface $notification, string $channel)
     {
-        $this->notifiable = $notifiable;
-        $this->notification = $notification;
-        $this->channel = $channel;
+        $this->setNotifiable($notifiable);
+        $this->setNotification($notification);
+        $this->setChannel($channel);
     }
 
     /**

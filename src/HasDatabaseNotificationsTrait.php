@@ -25,7 +25,7 @@ use SN\Notifications\Entity\Notification;
  *
  * @author Steve Nebes <steve@nebes.net>
  */
-trait HasDatabaseNotifications
+trait HasDatabaseNotificationsTrait
 {
     /**
      * Get the entitys' notifications.
