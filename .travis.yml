@@ -7,4 +7,6 @@ before_install:
 install:
     - composer install --prefer-dist --no-interaction $COMPOSER_FLAGS
 script:
+    - ls -laR src
+    - ls -laR tests
     - phpunit --configuration phpunit.xml.dist --coverage-text
