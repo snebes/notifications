@@ -15,9 +15,9 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use SN\Notifications\Channel\MailChannel;
 use SN\Notifications\Contracts\NotifiableInterface;
-use SN\Notifications\Contracts\NotificationInterface;
 use SN\Notifications\Events;
 use SN\Notifications\NotificationSender;
+use SN\Notifications\Tests\Fixture\NotificationFixture;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface as EventDispatcherContract;
 
@@ -174,13 +174,5 @@ class NotificationSenderTest extends TestCase
 
         $sender = new NotificationSender($dispatcher);
         $sender->send($notifiable, $notification);
-    }
-}
-
-class NotificationFixture implements NotificationInterface
-{
-    public function via(NotifiableInterface $notifiable): array
-    {
-        return ['mail'];
     }
 }

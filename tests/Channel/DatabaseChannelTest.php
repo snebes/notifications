@@ -15,7 +15,8 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use SN\Notifications\Channel\DatabaseChannel;
 use SN\Notifications\Contracts\NotifiableInterface;
-use SN\Notifications\Contracts\NotificationInterface;
+use SN\Notifications\Tests\Fixture\BadDatabaseNotificationFixture;
+use SN\Notifications\Tests\Fixture\DatabaseNotificationFixture;
 
 /**
  * @author Steve Nebes <steve@nebes.net>
@@ -68,26 +69,5 @@ class DatabaseChannelTest extends TestCase
 
         $channel = new DatabaseChannel();
         $channel->send($notifiable, $notification);
-    }
-}
-
-class DatabaseNotificationFixture implements NotificationInterface
-{
-    public function via(NotifiableInterface $notifiable): array
-    {
-        return ['database'];
-    }
-
-    public function toDatabase(NotifiableInterface $notifiable): array
-    {
-        return ['foo' => 'bar'];
-    }
-}
-
-class BadDatabaseNotificationFixture implements NotificationInterface
-{
-    public function via(NotifiableInterface $notifiable): array
-    {
-        return ['database'];
     }
 }

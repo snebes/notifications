@@ -14,10 +14,9 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use SN\Notifications\Channel\MailChannel;
 use SN\Notifications\Contracts\MailerInterface;
-use SN\Notifications\Contracts\NotifiableInterface;
-use SN\Notifications\Contracts\NotificationInterface;
-use SN\Notifications\Email\Email;
-use SN\Notifications\NotifiableTrait;
+use SN\Notifications\Tests\Fixture\BadMailFixture;
+use SN\Notifications\Tests\Fixture\MailFixture;
+use SN\Notifications\Tests\Fixture\NotifiableFixture;
 
 /**
  * @author Steve Nebes <steve@nebes.net>
@@ -79,36 +78,5 @@ class MailChannelTest extends TestCase
 
         $channel = new MailChannel($mailer);
         $channel->send($notifiable, $notification);
-    }
-}
-
-class NotifiableFixture implements NotifiableInterface
-{
-    use NotifiableTrait;
-
-    public $email;
-}
-
-class MailFixture implements NotificationInterface
-{
-    public function via(NotifiableInterface $notifiable): array
-    {
-        return ['mail'];
-    }
-
-    public function toMail(NotifiableInterface $notifiable): Email
-    {
-        return (new Email())
-            ->from('steve@nebes.net')
-            ->subject('hello')
-            ->text('world');
-    }
-}
-
-class BadMailFixture implements NotificationInterface
-{
-    public function via(NotifiableInterface $notifiable): array
-    {
-        return ['mail'];
     }
 }
