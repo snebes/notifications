@@ -8,15 +8,15 @@
 
 declare(strict_types=1);
 
-namespace SN\Notifications\Tests\Channel;
+namespace Tests\SN\Notifications\Channel;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use SN\Notifications\Channel\DatabaseChannel;
 use SN\Notifications\Contracts\NotifiableInterface;
-use SN\Notifications\Tests\Fixture\BadDatabaseNotificationFixture;
-use SN\Notifications\Tests\Fixture\DatabaseNotificationFixture;
+use Tests\SN\Notifications\Fixture\BadDatabaseNotificationFixture;
+use Tests\SN\Notifications\Fixture\DatabaseNotificationFixture;
 
 /**
  * @author Steve Nebes <steve@nebes.net>
