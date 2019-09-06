@@ -21,4 +21,9 @@ class NotifiableFixture implements NotifiableInterface
     use NotifiableTrait;
 
     public $email;
+
+    public function routeNotificationForFoo()
+    {
+        return 'bar';
+    }
 }
