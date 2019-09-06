@@ -11,7 +11,6 @@ declare(strict_types=1);
 namespace SN\Notifications\Tests;
 
 use PHPUnit\Framework\TestCase;
-use SN\Notifications\NotifiableTrait;
 use SN\Notifications\Tests\Fixture\NotifiableFixture;
 
 /**
