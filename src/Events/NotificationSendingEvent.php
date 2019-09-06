@@ -13,6 +13,9 @@ namespace SN\Notifications\Events;
 use SN\Notifications\Contracts\NotifiableInterface;
 use SN\Notifications\Contracts\NotificationInterface;
 
+/**
+ * @author Steve Nebes <steve@nebes.net>
+ */
 class NotificationSendingEvent extends Event
 {
     /**

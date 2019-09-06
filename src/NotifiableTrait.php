@@ -16,6 +16,8 @@ use SN\Notifications\Contracts\NotificationInterface;
  * Adds routing methods for notifications.
  *
  * @property $email
+ *
+ * @author Steve Nebes <steve@nebes.net>
  */
 trait NotifiableTrait
 {

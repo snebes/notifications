@@ -13,7 +13,11 @@ namespace SN\Notifications\Channel;
 use SN\Notifications\Contracts\ChannelInterface;
 use SN\Notifications\Contracts\NotifiableInterface;
 use SN\Notifications\Contracts\NotificationInterface;
+use SN\Notifications\Entity\Notification;
 
+/**
+ * @author Steve Nebes <steve@nebes.net>
+ */
 class DatabaseChannel implements ChannelInterface
 {
     /**
@@ -36,6 +40,29 @@ class DatabaseChannel implements ChannelInterface
      */
     public function send(NotifiableInterface $notifiable, NotificationInterface $notification)
     {
-        // TODO: Implement send() method.
+        $entity = new Notification();
+        $entity->setData($this->getData($notifiable, $notification));
+
+        return $notifiable->routeNotificationFor('database', $notification)->add($entity);
+    }
+
+    /**
+     * Get the data for the notification.
+     *
+     * @param NotifiableInterface   $notifiable
+     * @param NotificationInterface $notification
+     *
+     * @return array
+     * @throws \RuntimeException
+     */
+    protected function getData(NotifiableInterface $notifiable, NotificationInterface $notification): array
+    {
+        if (\method_exists($notification, 'toDatabase')) {
+            $data = $notification->toDatabase($notifiable);
+
+            return (array) $data;
+        }
+
+        throw new \RuntimeException('Notification is missing toDatabase method.');
     }
 }

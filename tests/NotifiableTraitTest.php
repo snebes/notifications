@@ -13,6 +13,9 @@ namespace SN\Notifications\Tests;
 use PHPUnit\Framework\TestCase;
 use SN\Notifications\NotifiableTrait;
 
+/**
+ * @author Steve Nebes <steve@nebes.net>
+ */
 class NotifiableTraitTest extends TestCase
 {
     public function testMail(): void

@@ -4,6 +4,7 @@ phpunit.xml
 .phpunit.result.cache
 
 /.idea/
+/build/
 /vendor/
 
 .DS_Store

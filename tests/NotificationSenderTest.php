@@ -10,6 +10,7 @@ declare(strict_types=1);
 
 namespace SN\Notifications\Tests;
 
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use SN\Notifications\Contracts\NotifiableInterface;
 use SN\Notifications\Contracts\NotificationInterface;
@@ -18,13 +19,18 @@ use SN\Notifications\NotificationSender;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface as EventDispatcherContract;
 
+/**
+ * @author Steve Nebes <steve@nebes.net>
+ */
 class NotificationSenderTest extends TestCase
 {
     public function testSend(): void
     {
+        /** @var NotifiableInterface $notifiable */
         $notifiable = $this->createMock(NotifiableInterface::class);
         $notification = new NotificationFixture();
 
+        /** @var MockObject|EventDispatcherInterface $dispatcher */
         $dispatcher = $this->createMock(EventDispatcherInterface::class);
 
         if (\interface_exists(EventDispatcherContract::class)) {

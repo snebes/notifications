@@ -10,6 +10,18 @@ declare(strict_types=1);
 
 namespace SN\Notifications\Contracts;
 
+/**
+ * @author Steve Nebes <steve@nebes.net>
+ */
 interface NotifiableInterface
 {
+    /**
+     * Get the notification routing information for the given channel.
+     *
+     * @param string                     $channel
+     * @param NotificationInterface|null $notification
+     *
+     * @return mixed|null
+     */
+    public function routeNotificationFor(string $channel, NotificationInterface $notification = null);
 }

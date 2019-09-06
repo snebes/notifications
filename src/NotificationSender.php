@@ -19,6 +19,9 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface as EventDispatcherContract;
 use UnexpectedValueException;
 
+/**
+ * @author Steve Nebes <steve@nebes.net>
+ */
 class NotificationSender
 {
     /**

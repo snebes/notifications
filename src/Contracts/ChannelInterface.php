@@ -10,6 +10,9 @@ declare(strict_types=1);
 
 namespace SN\Notifications\Contracts;
 
+/**
+ * @author Steve Nebes <steve@nebes.net>
+ */
 interface ChannelInterface
 {
     /**

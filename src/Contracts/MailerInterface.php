@@ -13,14 +13,14 @@ namespace SN\Notifications\Contracts;
 /**
  * @author Steve Nebes <steve@nebes.net>
  */
-interface NotificationInterface
+interface MailerInterface
 {
     /**
-     * Get the channels the notification should broadcast on.
+     * Sends the given email message.
      *
-     * @param NotifiableInterface $notifiable
+     * @param mixed $email
      *
-     * @return array
+     * @return bool
      */
-    public function via(NotifiableInterface $notifiable): array;
+    public function send($email): bool;
 }
