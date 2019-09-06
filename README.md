@@ -8,4 +8,7 @@
 
 ## Introduction
 
-**snebes/notifications** provides support for sending notifications across a variety of delivery channels, including mail, SMS, and Slack. Notifications can also be stored in a database so that they may be displayed in your web interface.
+`snebes/notifications` provides support for sending notifications across a variety of delivery channels, including mail, SMS†, and Slack†. Notifications can also be stored in a database so that they may be displayed in your web interface.
+
+† Support for these channels coming soon.
+

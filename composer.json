@@ -10,6 +10,29 @@
         }
     ],
     "require": {
-        "php": "^7.2"
+        "php": "^7.2",
+        "doctrine/collections": "^1.6",
+        "symfony/event-dispatcher": "^3.4|^4.0",
+        "swiftmailer/swiftmailer": "^6.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^7.5|^8.0",
+        "doctrine/orm": "^2.6"
+    },
+    "config": {
+        "preferred-install": {
+            "*": "dist"
+        },
+        "sort-packages": true
+    },
+    "autoload": {
+        "psr-4": {
+            "SN\\Notifications\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "SN\\Notifications\\Tests\\": "tests/"
+        }
     }
 }
