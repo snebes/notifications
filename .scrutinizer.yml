@@ -10,15 +10,13 @@ build:
     environment:
         php:
             version: 7.2
-    nodes:
-        coverage:
-            tests:
-                override:
-                    -
-                        command: vendor/bin/phpunit --coverage-clover=clover.xml
-                        coverage:
-                            file: clover.xml
-                            format: php-clover
+    tests:
+        override:
+            -
+                command: vendor/bin/phpunit --coverage-clover=clover.xml
+                coverage:
+                    file: clover.xml
+                    format: php-clover
 tools:
     php_cs_fixer:
         config: { level: psr2 }
