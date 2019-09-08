@@ -15,6 +15,9 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity()
+ * @ORM\Table(indexes={
+ *     @ORM\Index(name="notifiable_idx", columns={"notifiable_type", "notifiable_id"})
+ * })
  *
  * @author Steve Nebes <steve@nebes.net>
  */
@@ -35,6 +38,20 @@ class Notification
      * @ORM\Column(type="datetime")
      */
     protected $createdAt;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(type="string")
+     */
+    protected $notifiableType = '';
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(type="string", length=64)
+     */
+    protected $notifiableId = '';
 
     /**
      * @var DateTime|null
@@ -69,6 +86,38 @@ class Notification
     public function getCreatedAt(): DateTime
     {
         return $this->createdAt;
+    }
+
+    /**
+     * @return string
+     */
+    public function getNotifiableType(): string
+    {
+        return $this->notifiableType;
+    }
+
+    /**
+     * @param string $notifiableType
+     */
+    public function setNotifiableType(string $notifiableType): void
+    {
+        $this->notifiableType = $notifiableType;
+    }
+
+    /**
+     * @return string
+     */
+    public function getNotifiableId(): string
+    {
+        return $this->notifiableId;
+    }
+
+    /**
+     * @param string $notifiableId
+     */
+    public function setNotifiableId(string $notifiableId): void
+    {
+        $this->notifiableId = $notifiableId;
     }
 
     /**
