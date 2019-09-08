@@ -16,12 +16,34 @@ use SN\Notifications\Contracts\NotificationInterface;
  * Adds routing methods for notifications.
  *
  * @property $email
+ * @property $id
+ * @property $phoneNumber
  *
  * @author Steve Nebes <steve@nebes.net>
  */
 trait NotifiableTrait
 {
     use HasDatabaseNotificationsTrait;
+
+    /**
+     * Return a type identifier of the notifiable, typically the class name.
+     *
+     * @return string
+     */
+    public function getNotifiableType(): string
+    {
+        return \get_class($this);
+    }
+
+    /**
+     * Return a unique identifier of the notifiable, typically the database primary key.
+     *
+     * @return string
+     */
+    public function getNotifiableId(): string
+    {
+        return $this->id;
+    }
 
     /**
      * Get the notification routing information for the given channel.

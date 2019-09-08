@@ -21,6 +21,21 @@ use SN\Notifications\Entity\Notification;
 class DatabaseChannel implements ChannelInterface
 {
     /**
+     * @var string
+     */
+    private $notificationEntityClass;
+
+    /**
+     * Default values.
+     *
+     * @param string $notificationEntityClass
+     */
+    public function __construct(string $notificationEntityClass = Notification::class)
+    {
+        $this->notificationEntityClass = $notificationEntityClass;
+    }
+
+    /**
      * Return channel short-name.
      *
      * @return string
@@ -40,7 +55,12 @@ class DatabaseChannel implements ChannelInterface
      */
     public function send(NotifiableInterface $notifiable, NotificationInterface $notification)
     {
-        $entity = new Notification();
+        $entityClass = $this->notificationEntityClass;
+
+        /** @var Notification $entity */
+        $entity = new $entityClass();
+        $entity->setNotifiableType(\get_class($notifiable));
+        $entity->setNotifiableId($notifiable->getId());
         $entity->setData($this->getData($notifiable, $notification));
 
         $notifiable->routeNotificationFor('database', $notification)->add($entity);
