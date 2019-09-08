@@ -15,6 +15,8 @@ use SN\Notifications\Contracts\EmailInterface;
 use SN\Notifications\Contracts\MailerInterface;
 use SN\Notifications\Contracts\NotifiableInterface;
 use SN\Notifications\Contracts\NotificationInterface;
+use SN\Notifications\Event\NotificationSendEvent;
+use SN\Notifications\NotificationEvents;
 
 /**
  * @author Steve Nebes <steve@nebes.net>
@@ -41,42 +43,74 @@ class MailChannel implements ChannelInterface
      *
      * @return string
      */
-    public function getName(): string
+    public static function getName(): string
     {
         return 'mail';
     }
 
     /**
+     * @return array
+     */
+    public static function getSubscribedEvents(): array
+    {
+        return [
+            NotificationEvents::SEND => [['send', 255]],
+        ];
+    }
+
+    /**
      * Send the given notification.
+     *
+     * @param NotificationSendEvent $event
+     */
+    public function send(NotificationSendEvent $event): void
+    {
+        if ($event->getChannel() !== static::getName()) {
+            return;
+        }
+
+        $notifiable = $event->getNotifiable();
+        $notification = $event->getNotification();
+
+        $email = $this->getData($notifiable, $notification);
+
+        if ($email instanceof EmailInterface) {
+            $response = $this->mailer->send($email);
+            $event->setResponse($response);
+        }
+    }
+
+    /**
+     * Get the data for the notification.
      *
      * @param NotifiableInterface   $notifiable
      * @param NotificationInterface $notification
      *
-     * @return mixed
+     * @return EmailInterface
      * @throws \RuntimeException
      */
-    public function send(NotifiableInterface $notifiable, NotificationInterface $notification)
+    protected function getData(NotifiableInterface $notifiable, NotificationInterface $notification): EmailInterface
     {
-        if (!\method_exists($notification, 'toMail')) {
-            throw new \RuntimeException('Notification is missing toMail method.');
-        }
+        if (\method_exists($notification, 'toMail')) {
+            $email = $notification->toMail($notifiable);
 
-        $toEmail = $notifiable->routeNotificationFor('mail', $notification);
+            if (!$email instanceof EmailInterface) {
+                throw new \RuntimeException('toMail should return an EmailInterface object.');
+            }
 
-        if (!$toEmail) {
-            return null;
-        }
+            $toEmail = $notifiable->routeNotificationFor('mail', $notification);
 
-        $email = $notification->toMail($notifiable);
+            if (empty($toEmail) && empty($email->getTo())) {
+                throw new \RuntimeException('Notification does contain a To email address.');
+            }
 
-        if ($email instanceof EmailInterface) {
             if (empty($email->getTo())) {
                 $email->to($toEmail);
             }
 
-            return $this->mailer->send($email);
+            return $email;
         }
 
-        return null;
+        throw new \RuntimeException('Notification is missing toMail method.');
     }
 }

@@ -18,6 +18,17 @@ use Tests\SN\Notifications\Fixture\NotifiableFixture;
  */
 class NotifiableTraitTest extends TestCase
 {
+    public function testNotifiableType(): void
+    {
+        $instance = new NotifiableFixture();
+        $this->assertSame(NotifiableFixture::class, $instance->getNotifiableType());
+    }
+    public function testNotifiableId(): void
+    {
+        $instance = new NotifiableFixture();
+        $this->assertSame('foo', $instance->getNotifiableId());
+    }
+
     public function testMail(): void
     {
         $instance = new NotifiableFixture();

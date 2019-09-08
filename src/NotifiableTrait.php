@@ -10,6 +10,8 @@ declare(strict_types=1);
 
 namespace SN\Notifications;
 
+use SN\Notifications\Channel\DatabaseChannel;
+use SN\Notifications\Channel\MailChannel;
 use SN\Notifications\Contracts\NotificationInterface;
 
 /**
@@ -60,9 +62,9 @@ trait NotifiableTrait
         }
 
         switch ($channel) {
-            case 'database':
+            case DatabaseChannel::getName():
                 return $this->getNotifications();
-            case 'mail':
+            case MailChannel::getName():
                 return $this->email ?? null;
         }
 

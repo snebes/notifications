@@ -14,9 +14,12 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use SN\Notifications\Channel\MailChannel;
 use SN\Notifications\Contracts\MailerInterface;
+use SN\Notifications\Event\NotificationSendEvent;
+use SN\Notifications\NotificationEvents;
 use Tests\SN\Notifications\Fixture\BadMailFixture;
 use Tests\SN\Notifications\Fixture\MailFixture;
 use Tests\SN\Notifications\Fixture\NotifiableFixture;
+use Tests\SN\Notifications\Fixture\NotificationFixture;
 
 /**
  * @author Steve Nebes <steve@nebes.net>
@@ -25,11 +28,12 @@ class MailChannelTest extends TestCase
 {
     public function testName(): void
     {
-        /** @var MockObject|MailerInterface $mailer */
-        $mailer = $this->createMock(MailerInterface::class);
+        $this->assertSame('mail', MailChannel::getName());
+    }
 
-        $channel = new MailChannel($mailer);
-        $this->assertSame('mail', $channel->getName());
+    public function testEvents(): void
+    {
+        $this->assertSame([NotificationEvents::SEND => [['send', 255]]], MailChannel::getSubscribedEvents());
     }
 
     public function testSend(): void
@@ -46,13 +50,16 @@ class MailChannelTest extends TestCase
             ->willReturn(true);
 
         $channel = new MailChannel($mailer);
-        $response = $channel->send($notifiable, $notification);
+        $event = new NotificationSendEvent($notifiable, $notification, MailChannel::getName());
+        $channel->send($event);
 
-        $this->assertTrue($response);
+        $this->assertTrue($event->getResponse());
     }
 
     public function testNoSenderNotification()
     {
+        $this->expectException(\RuntimeException::class);
+
         $notification = new MailFixture();
         $notifiable = new NotifiableFixture();
         $notifiable->email = '';
@@ -61,22 +68,54 @@ class MailChannelTest extends TestCase
         $mailer = $this->createMock(MailerInterface::class);
 
         $channel = new MailChannel($mailer);
-        $response = $channel->send($notifiable, $notification);
+        $event = new NotificationSendEvent($notifiable, $notification, MailChannel::getName());
+        $channel->send($event);
 
-        $this->assertNull($response);
+        $this->assertNull($event->getResponse());
     }
 
-    public function testBadNotification()
+    public function testBadNotification1()
     {
         $this->expectException(\RuntimeException::class);
 
-        $notification = new BadMailFixture();
         $notifiable = new NotifiableFixture();
+        $notification = new BadMailFixture();
 
         /** @var MockObject|MailerInterface $mailer */
         $mailer = $this->createMock(MailerInterface::class);
 
         $channel = new MailChannel($mailer);
-        $channel->send($notifiable, $notification);
+        $event = new NotificationSendEvent($notifiable, $notification, MailChannel::getName());
+        $channel->send($event);
+    }
+
+    public function testBadNotification2()
+    {
+        $this->expectException(\RuntimeException::class);
+
+        $notifiable = new NotifiableFixture();
+        $notification = new NotificationFixture();
+
+        /** @var MockObject|MailerInterface $mailer */
+        $mailer = $this->createMock(MailerInterface::class);
+
+        $channel = new MailChannel($mailer);
+        $event = new NotificationSendEvent($notifiable, $notification, MailChannel::getName());
+        $channel->send($event);
+    }
+
+    public function testWrongChannel(): void
+    {
+        $notifiable = new NotifiableFixture();
+        $notification = new NotificationFixture();
+
+        /** @var MockObject|MailerInterface $mailer */
+        $mailer = $this->createMock(MailerInterface::class);
+
+        $channel = new MailChannel($mailer);
+        $event = new NotificationSendEvent($notifiable, $notification, 'baz');
+        $channel->send($event);
+
+        $this->assertNull($event->getResponse());
     }
 }

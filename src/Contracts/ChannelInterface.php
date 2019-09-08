@@ -10,25 +10,25 @@ declare(strict_types=1);
 
 namespace SN\Notifications\Contracts;
 
+use SN\Notifications\Event\NotificationSendEvent;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+
 /**
  * @author Steve Nebes <steve@nebes.net>
  */
-interface ChannelInterface
+interface ChannelInterface extends EventSubscriberInterface
 {
     /**
      * Return channel short-name.
      *
      * @return string
      */
-    public function getName(): string;
+    public static function getName(): string;
 
     /**
      * Send the given notification.
      *
-     * @param NotifiableInterface   $notifiable
-     * @param NotificationInterface $notification
-     *
-     * @return mixed
+     * @param NotificationSendEvent $event
      */
-    public function send(NotifiableInterface $notifiable, NotificationInterface $notification);
+    public function send(NotificationSendEvent $event): void;
 }

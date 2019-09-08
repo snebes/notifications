@@ -14,6 +14,8 @@ use SN\Notifications\Contracts\ChannelInterface;
 use SN\Notifications\Contracts\NotifiableInterface;
 use SN\Notifications\Contracts\NotificationInterface;
 use SN\Notifications\Entity\Notification;
+use SN\Notifications\Event\NotificationSendEvent;
+use SN\Notifications\NotificationEvents;
 
 /**
  * @author Steve Nebes <steve@nebes.net>
@@ -40,32 +42,45 @@ class DatabaseChannel implements ChannelInterface
      *
      * @return string
      */
-    public function getName(): string
+    public static function getName(): string
     {
         return 'database';
     }
 
     /**
+     * @return array
+     */
+    public static function getSubscribedEvents(): array
+    {
+        return [
+            NotificationEvents::SEND => [['send', 255]],
+        ];
+    }
+
+    /**
      * Send the given notification.
      *
-     * @param NotifiableInterface   $notifiable
-     * @param NotificationInterface $notification
-     *
-     * @return mixed
+     * @param NotificationSendEvent $event
      */
-    public function send(NotifiableInterface $notifiable, NotificationInterface $notification)
+    public function send(NotificationSendEvent $event): void
     {
+        if ($event->getChannel() !== static::getName()) {
+            return;
+        }
+
+        $notifiable = $event->getNotifiable();
+        $notification = $event->getNotification();
         $entityClass = $this->notificationEntityClass;
 
         /** @var Notification $entity */
         $entity = new $entityClass();
-        $entity->setNotifiableType(\get_class($notifiable));
-        $entity->setNotifiableId($notifiable->getId());
+        $entity->setNotifiableType($notifiable->getNotifiableType());
+        $entity->setNotifiableId($notifiable->getNotifiableId());
         $entity->setData($this->getData($notifiable, $notification));
 
         $notifiable->routeNotificationFor('database', $notification)->add($entity);
 
-        return $entity;
+        $event->setResponse($entity);
     }
 
     /**

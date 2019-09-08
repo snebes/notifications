@@ -14,7 +14,6 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\Common\Collections\Selectable;
-use Doctrine\ORM\Mapping as ORM;
 use SN\Notifications\Contracts\NotificationInterface;
 use SN\Notifications\Entity\Notification;
 

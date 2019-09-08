@@ -8,7 +8,7 @@
 
 declare(strict_types=1);
 
-namespace SN\Notifications\Events;
+namespace SN\Notifications\Event;
 
 use Symfony\Component\EventDispatcher\Event as LegacyEvent;
 use Symfony\Contracts\EventDispatcher\Event as ContractsEvent;

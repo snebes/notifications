@@ -16,6 +16,20 @@ namespace SN\Notifications\Contracts;
 interface NotifiableInterface
 {
     /**
+     * Return a type identifier of the notifiable, typically the class name.
+     *
+     * @return string
+     */
+    public function getNotifiableType(): string;
+
+    /**
+     * Return a unique identifier of the notifiable, typically the database primary key.
+     *
+     * @return string
+     */
+    public function getNotifiableId(): string;
+
+    /**
      * Get the notification routing information for the given channel.
      *
      * @param string                     $channel
