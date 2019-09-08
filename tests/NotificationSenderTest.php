@@ -13,9 +13,9 @@ namespace Tests\SN\Notifications;
 use Doctrine\Common\Collections\ArrayCollection;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use SN\Notifications\Channel\MailChannel;
 use SN\Notifications\Contracts\NotifiableInterface;
-use SN\Notifications\Events;
+use SN\Notifications\Event;
+use SN\Notifications\NotificationEvents;
 use SN\Notifications\NotificationSender;
 use Tests\SN\Notifications\Fixture\NotificationFixture;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -37,35 +37,35 @@ class NotificationSenderTest extends TestCase
 
         if (\interface_exists(EventDispatcherContract::class)) {
             $dispatcher
-                ->expects($this->exactly(2))
+                ->expects($this->exactly(3))
                 ->method('dispatch')
                 ->withConsecutive([
-                    $this->isInstanceOf(Events\NotificationSendingEvent::class),
-                    $this->equalTo('sn.notification.sending'),
+                    $this->isInstanceOf(Event\NotificationSendingEvent::class),
+                    $this->equalTo(NotificationEvents::SENDING),
                 ], [
-                    $this->isInstanceOf(Events\NotificationSentEvent::class),
-                    $this->equalTo('sn.notification.sent'),
+                    $this->isInstanceOf(Event\NotificationSendEvent::class),
+                    $this->equalTo(NotificationEvents::SEND),
+                ], [
+                    $this->isInstanceOf(Event\NotificationSentEvent::class),
+                    $this->equalTo(NotificationEvents::SENT),
                 ]);
         } else {
             $dispatcher
-                ->expects($this->exactly(2))
+                ->expects($this->exactly(3))
                 ->method('dispatch')
                 ->withConsecutive([
-                    $this->equalTo('sn.notification.sending'),
-                    $this->isInstanceOf(Events\NotificationSendingEvent::class),
+                    $this->equalTo(NotificationEvents::SENDING),
+                    $this->isInstanceOf(Event\NotificationSendingEvent::class),
                 ], [
-                    $this->equalTo('sn.notification.sent'),
-                    $this->isInstanceOf(Events\NotificationSentEvent::class),
+                    $this->equalTo(NotificationEvents::SEND),
+                    $this->isInstanceOf(Event\NotificationSendEvent::class),
+                ], [
+                    $this->equalTo(NotificationEvents::SENT),
+                    $this->isInstanceOf(Event\NotificationSentEvent::class),
                 ]);
         }
 
-        /** @var MockObject|MailChannel $mailChannel */
-        $mailChannel = $this->createMock(MailChannel::class);
-        $mailChannel->expects($this->once())->method('getName')->willReturn('mail');
-
         $sender = new NotificationSender($dispatcher);
-        $sender->registerChannel($mailChannel);
-
         $sender->send($notifiable, $notification);
     }
 
@@ -101,46 +101,6 @@ class NotificationSenderTest extends TestCase
         $sender->sendNow(new ArrayCollection([$notifiable]), $notification, []);
     }
 
-    public function testSendToFakeChannel(): void
-    {
-        /** @var NotifiableInterface $notifiable */
-        $notifiable = $this->createMock(NotifiableInterface::class);
-        $notification = new NotificationFixture();
-
-        /** @var MockObject|EventDispatcherInterface $dispatcher */
-        $dispatcher = $this->createMock(EventDispatcherInterface::class);
-        $dispatcher
-            ->expects($this->exactly(2))
-            ->method('dispatch');
-
-        if (\interface_exists(EventDispatcherContract::class)) {
-            $dispatcher
-                ->expects($this->exactly(2))
-                ->method('dispatch')
-                ->withConsecutive([
-                    $this->isInstanceOf(Events\NotificationSendingEvent::class),
-                    $this->equalTo('sn.notification.sending'),
-                ], [
-                    $this->isInstanceOf(Events\NotificationFailedEvent::class),
-                    $this->equalTo('sn.notification.failed'),
-                ]);
-        } else {
-            $dispatcher
-                ->expects($this->exactly(2))
-                ->method('dispatch')
-                ->withConsecutive([
-                    $this->equalTo('sn.notification.sending'),
-                    $this->isInstanceOf(Events\NotificationSendingEvent::class),
-                ], [
-                    $this->equalTo('sn.notification.failed'),
-                    $this->isInstanceOf(Events\NotificationFailedEvent::class),
-                ]);
-        }
-
-        $sender = new NotificationSender($dispatcher);
-        $sender->sendNow($notifiable, $notification, ['fake']);
-    }
-
     public function testStopPropagation(): void
     {
         /** @var NotifiableInterface $notifiable */
@@ -155,21 +115,68 @@ class NotificationSenderTest extends TestCase
                 ->expects($this->exactly(1))
                 ->method('dispatch')
                 ->with(
-                    $this->callback(function (Events\NotificationSendingEvent $event) {
+                    $this->callback(function (Event\NotificationSendingEvent $event) {
                         $event->stopPropagation();
                         return true;
                     }),
-                    $this->equalTo('sn.notification.sending'));
+                    $this->equalTo(NotificationEvents::SENDING));
         } else {
             $dispatcher
                 ->expects($this->exactly(1))
                 ->method('dispatch')
                 ->with(
-                    $this->equalTo('sn.notification.sending'),
-                    $this->callback(function (Events\NotificationSendingEvent $event) {
+                    $this->equalTo(NotificationEvents::SENDING),
+                    $this->callback(function (Event\NotificationSendingEvent $event) {
                         $event->stopPropagation();
                         return true;
                     }));
+        }
+
+        $sender = new NotificationSender($dispatcher);
+        $sender->send($notifiable, $notification);
+    }
+
+    public function testCatchException(): void
+    {
+        /** @var NotifiableInterface $notifiable */
+        $notifiable = $this->createMock(NotifiableInterface::class);
+        $notification = new NotificationFixture();
+
+        /** @var MockObject|EventDispatcherInterface $dispatcher */
+        $dispatcher = $this->createMock(EventDispatcherInterface::class);
+
+        if (\interface_exists(EventDispatcherContract::class)) {
+            $dispatcher
+                ->expects($this->at(0))
+                ->method('dispatch')
+                ->with($this->isInstanceOf(Event\NotificationSendingEvent::class), $this->equalTo(NotificationEvents::SENDING));
+
+            $dispatcher
+                ->expects($this->at(1))
+                ->method('dispatch')
+                ->with($this->isInstanceOf(Event\NotificationSendEvent::class), $this->equalTo(NotificationEvents::SEND))
+                ->will($this->throwException(new \RuntimeException()));
+
+            $dispatcher
+                ->expects($this->at(2))
+                ->method('dispatch')
+                ->with($this->isInstanceOf(Event\NotificationExceptionEvent::class), $this->equalTo(NotificationEvents::EXCEPTION));
+        } else {
+            $dispatcher
+                ->expects($this->at(0))
+                ->method('dispatch')
+                ->with($this->equalTo(NotificationEvents::SENDING), $this->isInstanceOf(Event\NotificationSendingEvent::class));
+
+            $dispatcher
+                ->expects($this->at(1))
+                ->method('dispatch')
+                ->with($this->equalTo(NotificationEvents::SEND), $this->isInstanceOf(Event\NotificationSendEvent::class))
+                ->will($this->throwException(new \RuntimeException()));
+
+            $dispatcher
+                ->expects($this->at(2))
+                ->method('dispatch')
+                ->with($this->equalTo(NotificationEvents::EXCEPTION), $this->isInstanceOf(Event\NotificationExceptionEvent::class));
         }
 
         $sender = new NotificationSender($dispatcher);

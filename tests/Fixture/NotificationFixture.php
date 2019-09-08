@@ -22,4 +22,9 @@ class NotificationFixture implements NotificationInterface
     {
         return ['mail'];
     }
+
+    public function toMail()
+    {
+        return null;
+    }
 }

@@ -16,10 +16,8 @@ use SN\Notifications\Contracts\NotificationInterface;
 /**
  * @author Steve Nebes <steve@nebes.net>
  */
-class NotificationFailedEvent extends Event
+class NotificationExceptionEvent extends Event
 {
-    public const NAME = 'sn';
-
     /**
      * @var \Exception
      */

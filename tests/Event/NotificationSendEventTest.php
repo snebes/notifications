@@ -8,17 +8,17 @@
 
 declare(strict_types=1);
 
-namespace Tests\SN\Notifications\Events;
+namespace Tests\SN\Notifications\Event;
 
 use PHPUnit\Framework\TestCase;
 use SN\Notifications\Contracts\NotifiableInterface;
 use SN\Notifications\Contracts\NotificationInterface;
-use SN\Notifications\Events\NotificationSentEvent;
+use SN\Notifications\Event\NotificationSendEvent;
 
 /**
  * @author Steve Nebes <steve@nebes.net>
  */
-class NotificationSentEventTest extends TestCase
+class NotificationSendEventTest extends TestCase
 {
     public function testEvent(): void
     {
@@ -27,10 +27,10 @@ class NotificationSentEventTest extends TestCase
         /** @var NotificationInterface $notification */
         $notification = $this->createMock(NotificationInterface::class);
 
-        $event = new NotificationSentEvent($notifiable, $notification, 'channel', 'response');
+        $event = new NotificationSendEvent($notifiable, $notification, 'channel');
         $this->assertSame($notifiable, $event->getNotifiable());
         $this->assertSame($notification, $event->getNotification());
         $this->assertSame('channel', $event->getChannel());
-        $this->assertSame('response', $event->getResponse());
+        $this->assertSame(null, $event->getResponse());
     }
 }

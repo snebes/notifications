@@ -20,7 +20,9 @@ class NotifiableFixture implements NotifiableInterface
 {
     use NotifiableTrait;
 
+    public $id = 'foo';
     public $email;
+    public $notifications;
 
     public function routeNotificationForFoo()
     {

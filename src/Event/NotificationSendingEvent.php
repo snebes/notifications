@@ -8,7 +8,7 @@
 
 declare(strict_types=1);
 
-namespace SN\Notifications\Events;
+namespace SN\Notifications\Event;
 
 use SN\Notifications\Contracts\NotifiableInterface;
 use SN\Notifications\Contracts\NotificationInterface;

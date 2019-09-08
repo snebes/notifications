@@ -12,23 +12,16 @@ namespace SN\Notifications;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use SN\Notifications\Contracts\ChannelInterface;
 use SN\Notifications\Contracts\NotifiableInterface;
 use SN\Notifications\Contracts\NotificationInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface as EventDispatcherContract;
-use UnexpectedValueException;
 
 /**
  * @author Steve Nebes <steve@nebes.net>
  */
 class NotificationSender
 {
-    /**
-     * @var array<string, ChannelInterface>
-     */
-    private $channels = [];
-
     /**
      * @var EventDispatcherInterface
      */
@@ -42,20 +35,6 @@ class NotificationSender
     public function __construct(EventDispatcherInterface $dispatcher)
     {
         $this->dispatcher = $dispatcher;
-    }
-
-    /**
-     * Register a channel with the Sender.
-     *
-     * @param ChannelInterface $channel
-     */
-    public function registerChannel(ChannelInterface $channel): void
-    {
-        $name = $channel->getName();
-
-        if (!isset($this->channels[$name])) {
-            $this->channels[$name] = $channel;
-        }
     }
 
     /**
@@ -103,8 +82,8 @@ class NotificationSender
         NotificationInterface $notification,
         string $channel
     ): void {
-        $event = new Events\NotificationSendingEvent($notifiable, $notification, $channel);
-        $this->dispatch($event, 'sn.notification.sending');
+        $event = new Event\NotificationSendingEvent($notifiable, $notification, $channel);
+        $this->dispatch($event, NotificationEvents::SENDING);
 
         if ($event->isPropagationStopped()) {
             return;
@@ -112,40 +91,24 @@ class NotificationSender
 
         // Send event to channel.
         try {
-            $response = $this->channel($channel)->send($notifiable, $notification);
+            $sendEvent = new Event\NotificationSendEvent($notifiable, $notification, $channel);
+            $this->dispatch($sendEvent, NotificationEvents::SEND);
 
-            $event = new Events\NotificationSentEvent($notifiable, $notification, $channel, $response);
-            $this->dispatch($event, 'sn.notification.sent');
+            $event = new Event\NotificationSentEvent($notifiable, $notification, $channel, $sendEvent->getResponse());
+            $this->dispatch($event, NotificationEvents::SENT);
         } catch (\Exception $exception) {
-            $event = new Events\NotificationFailedEvent($exception, $notifiable, $notification, $channel);
-            $this->dispatch($event, 'sn.notification.failed');
+            $event = new Event\NotificationExceptionEvent($exception, $notifiable, $notification, $channel);
+            $this->dispatch($event, NotificationEvents::EXCEPTION);
         }
-    }
-
-    /**
-     * Get a channel instance.
-     *
-     * @param string $channel
-     *
-     * @return ChannelInterface
-     * @throws UnexpectedValueException
-     */
-    private function channel(string $channel): ChannelInterface
-    {
-        if (isset($this->channels[$channel])) {
-            return $this->channels[$channel];
-        }
-
-        throw new UnexpectedValueException("Channel [{$channel}] not supported.");
     }
 
     /**
      * Event dispatch adapter for Symfony 3.4+ compatibility.
      *
-     * @param Events\Event $event
-     * @param string|null  $eventName
+     * @param Event\Event $event
+     * @param string|null $eventName
      */
-    protected function dispatch(Events\Event $event, string $eventName = null): void
+    protected function dispatch(Event\Event $event, string $eventName = null): void
     {
         if ($this->dispatcher instanceof EventDispatcherContract) {
             // Event dispatcher 4.3+
