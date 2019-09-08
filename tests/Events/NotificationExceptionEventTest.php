@@ -13,7 +13,7 @@ namespace Tests\SN\Notifications\Events;
 use PHPUnit\Framework\TestCase;
 use SN\Notifications\Contracts\NotifiableInterface;
 use SN\Notifications\Contracts\NotificationInterface;
-use SN\Notifications\Events\NotificationFailedEvent;
+use SN\Notifications\Event\NotificationExceptionEvent;
 
 /**
  * @author Steve Nebes <steve@nebes.net>
@@ -28,7 +28,7 @@ class NotificationFailedEventTest extends TestCase
         /** @var NotificationInterface $notification */
         $notification = $this->createMock(NotificationInterface::class);
 
-        $event = new NotificationFailedEvent($exception, $notifiable, $notification, 'channel');
+        $event = new NotificationExceptionEvent($exception, $notifiable, $notification, 'channel');
         $this->assertSame($exception, $event->getException());
         $this->assertSame($notifiable, $event->getNotifiable());
         $this->assertSame($notification, $event->getNotification());
