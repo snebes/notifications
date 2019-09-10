@@ -44,7 +44,7 @@ trait NotifiableTrait
      */
     public function getNotifiableId(): string
     {
-        return $this->id;
+        return (string) $this->id;
     }
 
     /**
