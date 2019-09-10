@@ -8,7 +8,7 @@
 
 declare(strict_types=1);
 
-namespace Tests\SN\Notifications\Channel;
+namespace SN\Notifications\Tests\Channel;
 
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -16,10 +16,10 @@ use SN\Notifications\Channel\DatabaseChannel;
 use SN\Notifications\Entity\Notification;
 use SN\Notifications\Event\NotificationSendEvent;
 use SN\Notifications\NotificationEvents;
-use Tests\SN\Notifications\Fixture\BadDatabaseNotificationFixture;
-use Tests\SN\Notifications\Fixture\DatabaseNotificationFixture;
-use Tests\SN\Notifications\Fixture\NotifiableFixture;
-use Tests\SN\Notifications\Fixture\NotificationFixture;
+use SN\Notifications\Tests\Fixture\BadDatabaseNotificationFixture;
+use SN\Notifications\Tests\Fixture\DatabaseNotificationFixture;
+use SN\Notifications\Tests\Fixture\NotifiableFixture;
+use SN\Notifications\Tests\Fixture\NotificationFixture;
 
 /**
  * @author Steve Nebes <steve@nebes.net>

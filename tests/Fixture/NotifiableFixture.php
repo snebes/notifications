@@ -8,7 +8,7 @@
 
 declare(strict_types=1);
 
-namespace Tests\SN\Notifications\Fixture;
+namespace SN\Notifications\Tests\Fixture;
 
 use SN\Notifications\Contracts\NotifiableInterface;
 use SN\Notifications\NotifiableTrait;

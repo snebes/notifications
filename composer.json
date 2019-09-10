@@ -36,7 +36,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Tests\\SN\\Notifications\\": "tests/"
+            "SN\\Notifications\\Tests\\": "tests/"
         }
     }
 }

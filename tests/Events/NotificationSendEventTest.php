@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Tests\SN\Notifications\Events;
+namespace SN\Notifications\Tests\Events;
 
 
 class NotificationSendEventTest

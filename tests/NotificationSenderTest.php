@@ -8,7 +8,7 @@
 
 declare(strict_types=1);
 
-namespace Tests\SN\Notifications;
+namespace SN\Notifications\Tests;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -17,7 +17,7 @@ use SN\Notifications\Contracts\NotifiableInterface;
 use SN\Notifications\Event;
 use SN\Notifications\NotificationEvents;
 use SN\Notifications\NotificationSender;
-use Tests\SN\Notifications\Fixture\NotificationFixture;
+use SN\Notifications\Tests\Fixture\NotificationFixture;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface as EventDispatcherContract;
 
