@@ -11,7 +11,7 @@ declare(strict_types=1);
 namespace SN\Notifications;
 
 /**
- * Contains all events thrown in the Notification component.
+ * Contains all events thrown in the DatabaseNotification component.
  *
  * @author Steve Nebes <steve@nebes.net>
  */

@@ -13,7 +13,7 @@ namespace SN\Notifications\Tests\Channel;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use SN\Notifications\Channel\DatabaseChannel;
-use SN\Notifications\Entity\Notification;
+use SN\Notifications\Model\DatabaseNotification;
 use SN\Notifications\Event\NotificationSendEvent;
 use SN\Notifications\NotificationEvents;
 use SN\Notifications\Tests\Fixture\BadDatabaseNotificationFixture;
@@ -53,8 +53,8 @@ class DatabaseChannelTest extends TestCase
         $entity = $notifications->get(0);
 
         $this->assertSame($entity, $event->getResponse());
-        $this->assertInstanceOf(Notification::class, $entity);
-        $this->assertSame(0, $entity->getId());
+        $this->assertInstanceOf(DatabaseNotification::class, $entity);
+        $this->assertNull($entity->getId());
         $this->assertInstanceOf(\DateTime::class, $entity->getCreatedAt());
         $this->assertSame(NotifiableFixture::class, $entity->getNotifiableType());
         $this->assertSame('foo', $entity->getNotifiableId());

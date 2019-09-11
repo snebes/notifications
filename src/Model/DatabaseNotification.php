@@ -8,62 +8,44 @@
 
 declare(strict_types=1);
 
-namespace SN\Notifications\Entity;
+namespace SN\Notifications\Model;
 
 use DateTime;
-use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity()
- * @ORM\Table(indexes={
- *     @ORM\Index(name="notifiable_idx", columns={"notifiable_type", "notifiable_id"})
- * })
+ * Database DatabaseNotification
  *
  * @author Steve Nebes <steve@nebes.net>
  */
-class Notification
+class DatabaseNotification implements DatabaseNotificationInterface
 {
     /**
-     * @var int
-     *
-     * @ORM\Id()
-     * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer")
+     * @var mixed
      */
     protected $id;
 
     /**
      * @var DateTime
-     *
-     * @ORM\Column(type="datetime")
      */
     protected $createdAt;
 
     /**
      * @var string
-     *
-     * @ORM\Column(type="string")
      */
     protected $notifiableType = '';
 
     /**
      * @var string
-     *
-     * @ORM\Column(type="string", length=64)
      */
     protected $notifiableId = '';
 
     /**
      * @var DateTime|null
-     *
-     * @ORM\Column(type="datetime", nullable=true)
      */
     protected $readAt;
 
     /**
      * @var array
-     *
-     * @ORM\Column(type="json")
      */
     protected $data = [];
 
@@ -73,11 +55,11 @@ class Notification
     }
 
     /**
-     * @return int
+     * @return mixed
      */
-    public function getId(): int
+    public function getId()
     {
-        return $this->id ?? 0;
+        return $this->id;
     }
 
     /**
@@ -115,7 +97,7 @@ class Notification
     /**
      * @param string $notifiableId
      */
-    public function setNotifiableId(string $notifiableId): void
+    public function setNotifiableId($notifiableId): void
     {
         $this->notifiableId = $notifiableId;
     }
@@ -147,7 +129,7 @@ class Notification
     /**
      * @param array $data
      */
-    public function setData(array $data): void
+    public function setData($data): void
     {
         $this->data = $data;
     }

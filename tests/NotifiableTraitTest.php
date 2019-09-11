@@ -26,7 +26,7 @@ class NotifiableTraitTest extends TestCase
     public function testNotifiableId(): void
     {
         $instance = new NotifiableFixture();
-        $this->assertSame('foo', $instance->getNotifiableId());
+        $this->assertSame('foo', $instance->getId());
     }
 
     public function testMail(): void

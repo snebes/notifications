@@ -101,7 +101,7 @@ class MailChannel implements ChannelInterface
             $toEmail = $notifiable->routeNotificationFor('mail', $notification);
 
             if (empty($toEmail) && empty($email->getTo())) {
-                throw new \RuntimeException('Notification does contain a To email address.');
+                throw new \RuntimeException('DatabaseNotification does contain a To email address.');
             }
 
             if (empty($email->getTo())) {
@@ -111,6 +111,6 @@ class MailChannel implements ChannelInterface
             return $email;
         }
 
-        throw new \RuntimeException('Notification is missing toMail method.');
+        throw new \RuntimeException('DatabaseNotification is missing toMail method.');
     }
 }
