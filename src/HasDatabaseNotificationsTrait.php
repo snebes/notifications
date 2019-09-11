@@ -15,12 +15,12 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\Common\Collections\Selectable;
 use SN\Notifications\Contracts\NotificationInterface;
-use SN\Notifications\Entity\Notification;
+use SN\Notifications\Model\DatabaseNotification;
 
 /**
  * Database notification methods.
  *
- * @property Notification[] $notifications
+ * @property DatabaseNotification[] $notifications
  *
  * @author Steve Nebes <steve@nebes.net>
  */

@@ -10,11 +10,13 @@ declare(strict_types=1);
 
 namespace SN\Notifications\Channel;
 
+use RuntimeException;
 use SN\Notifications\Contracts\ChannelInterface;
 use SN\Notifications\Contracts\NotifiableInterface;
 use SN\Notifications\Contracts\NotificationInterface;
-use SN\Notifications\Entity\Notification;
+use SN\Notifications\Model\DatabaseNotification;
 use SN\Notifications\Event\NotificationSendEvent;
+use SN\Notifications\Model\DatabaseNotificationInterface;
 use SN\Notifications\NotificationEvents;
 
 /**
@@ -25,16 +27,16 @@ class DatabaseChannel implements ChannelInterface
     /**
      * @var string
      */
-    private $notificationEntityClass;
+    private $notificationClass;
 
     /**
      * Default values.
      *
-     * @param string $notificationEntityClass
+     * @param string $notificationClass
      */
-    public function __construct(string $notificationEntityClass = Notification::class)
+    public function __construct(string $notificationClass = DatabaseNotification::class)
     {
-        $this->notificationEntityClass = $notificationEntityClass;
+        $this->notificationClass = $notificationClass;
     }
 
     /**
@@ -61,6 +63,8 @@ class DatabaseChannel implements ChannelInterface
      * Send the given notification.
      *
      * @param NotificationSendEvent $event
+     *
+     * @throws RuntimeException
      */
     public function send(NotificationSendEvent $event): void
     {
@@ -68,14 +72,19 @@ class DatabaseChannel implements ChannelInterface
             return;
         }
 
+        if (!\in_array(DatabaseNotificationInterface::class, \class_implements($this->notificationClass))) {
+            throw new RuntimeException(
+                'DatabaseChannel: $notificationClass must implement DatabaseNotificationInterface');
+        }
+
         $notifiable = $event->getNotifiable();
         $notification = $event->getNotification();
-        $entityClass = $this->notificationEntityClass;
+        $entityClass = $this->notificationClass;
 
-        /** @var Notification $entity */
+        /** @var DatabaseNotificationInterface $entity */
         $entity = new $entityClass();
+        $entity->setNotifiableId($notifiable->getId());
         $entity->setNotifiableType($notifiable->getNotifiableType());
-        $entity->setNotifiableId($notifiable->getNotifiableId());
         $entity->setData($this->getData($notifiable, $notification));
 
         $notifiable->routeNotificationFor('database', $notification)->add($entity);
@@ -90,7 +99,7 @@ class DatabaseChannel implements ChannelInterface
      * @param NotificationInterface $notification
      *
      * @return array
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     protected function getData(NotifiableInterface $notifiable, NotificationInterface $notification): array
     {
@@ -100,6 +109,6 @@ class DatabaseChannel implements ChannelInterface
             return (array) $data;
         }
 
-        throw new \RuntimeException('Notification is missing toDatabase method.');
+        throw new RuntimeException('DatabaseNotification is missing toDatabase method.');
     }
 }
