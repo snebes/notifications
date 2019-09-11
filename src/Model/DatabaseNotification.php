@@ -20,7 +20,7 @@ use DateTime;
 class DatabaseNotification implements DatabaseNotificationInterface
 {
     /**
-     * @var mixed
+     * @var int
      */
     protected $id;
 
@@ -30,14 +30,14 @@ class DatabaseNotification implements DatabaseNotificationInterface
     protected $createdAt;
 
     /**
-     * @var string
+     * @var mixed
      */
-    protected $notifiableType = '';
+    protected $notifiableId;
 
     /**
      * @var string
      */
-    protected $notifiableId = '';
+    protected $notifiableType = '';
 
     /**
      * @var DateTime|null
@@ -57,9 +57,9 @@ class DatabaseNotification implements DatabaseNotificationInterface
     /**
      * @return mixed
      */
-    public function getId()
+    public function getId(): int
     {
-        return $this->id;
+        return $this->id ?? 0;
     }
 
     /**
@@ -68,6 +68,22 @@ class DatabaseNotification implements DatabaseNotificationInterface
     public function getCreatedAt(): DateTime
     {
         return $this->createdAt;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getNotifiableId()
+    {
+        return $this->notifiableId;
+    }
+
+    /**
+     * @param mixed $notifiableId
+     */
+    public function setNotifiableId($notifiableId): void
+    {
+        $this->notifiableId = $notifiableId;
     }
 
     /**
@@ -84,22 +100,6 @@ class DatabaseNotification implements DatabaseNotificationInterface
     public function setNotifiableType(string $notifiableType): void
     {
         $this->notifiableType = $notifiableType;
-    }
-
-    /**
-     * @return string
-     */
-    public function getNotifiableId(): string
-    {
-        return $this->notifiableId;
-    }
-
-    /**
-     * @param string $notifiableId
-     */
-    public function setNotifiableId($notifiableId): void
-    {
-        $this->notifiableId = $notifiableId;
     }
 
     /**
@@ -129,7 +129,7 @@ class DatabaseNotification implements DatabaseNotificationInterface
     /**
      * @param array $data
      */
-    public function setData($data): void
+    public function setData(array $data): void
     {
         $this->data = $data;
     }
