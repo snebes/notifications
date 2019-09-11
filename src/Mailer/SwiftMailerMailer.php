@@ -22,16 +22,16 @@ use Swift_Message;
 class SwiftMailerMailer implements MailerInterface
 {
     /**
-     * @var Swift_Mailer
+     * @var Swift_Mailer|null
      */
     private $swiftMailer;
 
     /**
      * Default values.
      *
-     * @param Swift_Mailer $swiftMailer
+     * @param Swift_Mailer|null $swiftMailer
      */
-    public function __construct(Swift_Mailer $swiftMailer)
+    public function __construct(?Swift_Mailer $swiftMailer)
     {
         $this->swiftMailer = $swiftMailer;
     }
@@ -43,6 +43,10 @@ class SwiftMailerMailer implements MailerInterface
      */
     public function send($email): bool
     {
+        if (null === $this->swiftMailer) {
+            return false;
+        }
+
         if (!$email instanceof EmailInterface) {
             return false;
         }

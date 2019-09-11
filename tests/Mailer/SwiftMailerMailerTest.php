@@ -84,4 +84,12 @@ class SwiftMailerMailerTest extends TestCase
 
         $this->assertFalse($response);
     }
+
+    public function testNullMailer(): void
+    {
+        $mailer = new SwiftMailerMailer(null);
+        $response = $mailer->send(new Email());
+
+        $this->assertFalse($response);
+    }
 }

@@ -10,8 +10,6 @@ declare(strict_types=1);
 
 namespace SN\Notifications\Model;
 
-use DateTime;
-
 /**
  * The DatabaseNotificationInterface defines how a database-stored notification needs to be structured for
  * DatabaseChannel to use it..
@@ -21,65 +19,23 @@ use DateTime;
 interface DatabaseNotificationInterface
 {
     /**
-     * Get the created date/time.
-     *
-     * @return DateTime
-     */
-    public function getCreatedAt(): DateTime;
-
-    /**
-     * Get a unique identifier of notifiable, such as the record id.
-     *
-     * @return string
-     */
-    public function getNotifiableId(): string;
-
-    /**
      * Set unique identifier of notifiable.
      *
      * @param mixed $id
      */
-    public function setNotifiableId($id): void;
-
-    /**
-     * Get a canonical name of notifiable, such as the fully-qualified class name.
-     *
-     * @return string
-     */
-    public function getNotifiableType(): string;
+    public function setNotifiableId($id);
 
     /**
      * Set canonical name of notifiable.
      *
      * @param string $type
      */
-    public function setNotifiableType(string $type): void;
-
-    /**
-     * Get the read at date/time.
-     *
-     * @return DateTime|null
-     */
-    public function getReadAt(): ?DateTime;
-
-    /**
-     * Set read at date/time.
-     *
-     * @param DateTime|null $dateTime
-     */
-    public function setReadAt(?DateTime $dateTime): void;
-
-    /**
-     * Get metadata stored in notification.
-     *
-     * @return mixed
-     */
-    public function getData();
+    public function setNotifiableType(string $type);
 
     /**
      * Set metadata stored in notification.
      *
-     * @param $data
+     * @param array $data
      */
-    public function setData($data): void;
+    public function setData(array $data);
 }

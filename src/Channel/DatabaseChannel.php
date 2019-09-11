@@ -10,6 +10,7 @@ declare(strict_types=1);
 
 namespace SN\Notifications\Channel;
 
+use Doctrine\ORM\EntityManager;
 use RuntimeException;
 use SN\Notifications\Contracts\ChannelInterface;
 use SN\Notifications\Contracts\NotifiableInterface;
@@ -25,6 +26,11 @@ use SN\Notifications\NotificationEvents;
 class DatabaseChannel implements ChannelInterface
 {
     /**
+     * @var EntityManager|null
+     */
+    private $em;
+
+    /**
      * @var string
      */
     private $notificationClass;
@@ -32,10 +38,12 @@ class DatabaseChannel implements ChannelInterface
     /**
      * Default values.
      *
-     * @param string $notificationClass
+     * @param EntityManager|null $em
+     * @param string        $notificationClass
      */
-    public function __construct(string $notificationClass = DatabaseNotification::class)
+    public function __construct(?EntityManager $em, string $notificationClass = DatabaseNotification::class)
     {
+        $this->em = $em;
         $this->notificationClass = $notificationClass;
     }
 
@@ -64,10 +72,14 @@ class DatabaseChannel implements ChannelInterface
      *
      * @param NotificationSendEvent $event
      *
-     * @throws RuntimeException
+     * @throws \Exception
      */
     public function send(NotificationSendEvent $event): void
     {
+        if (null === $this->em) {
+            return;
+        }
+
         if ($event->getChannel() !== static::getName()) {
             return;
         }
@@ -88,6 +100,8 @@ class DatabaseChannel implements ChannelInterface
         $entity->setData($this->getData($notifiable, $notification));
 
         $notifiable->routeNotificationFor('database', $notification)->add($entity);
+        $this->em->persist($entity);
+        $this->em->flush();
 
         $event->setResponse($entity);
     }
