@@ -18,6 +18,7 @@ use Swift_Message;
 
 /**
  * @author Steve Nebes <steve@nebes.net>
+ * @internal
  */
 class SwiftMailerMailer implements MailerInterface
 {

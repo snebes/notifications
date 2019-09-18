@@ -12,16 +12,18 @@ namespace SN\Notifications\Channel;
 
 use Doctrine\ORM\EntityManager;
 use RuntimeException;
+use SN\Notifications\Contracts\ArrayableInterface;
 use SN\Notifications\Contracts\ChannelInterface;
+use SN\Notifications\Contracts\DatabaseNotificationInterface;
 use SN\Notifications\Contracts\NotifiableInterface;
 use SN\Notifications\Contracts\NotificationInterface;
 use SN\Notifications\Model\DatabaseNotification;
 use SN\Notifications\Event\NotificationSendEvent;
-use SN\Notifications\Model\DatabaseNotificationInterface;
 use SN\Notifications\NotificationEvents;
 
 /**
  * @author Steve Nebes <steve@nebes.net>
+ * @internal
  */
 class DatabaseChannel implements ChannelInterface
 {
@@ -117,12 +119,12 @@ class DatabaseChannel implements ChannelInterface
      */
     protected function getData(NotifiableInterface $notifiable, NotificationInterface $notification): array
     {
-        if (\method_exists($notification, 'toDatabase')) {
-            $data = $notification->toDatabase($notifiable);
+        if ($notification instanceof ArrayableInterface) {
+            $data = $notification->toArray($notifiable);
 
-            return (array) $data;
+            return $data;
         }
 
-        throw new RuntimeException('DatabaseNotification is missing toDatabase method.');
+        throw new RuntimeException('NotificationInterface must also implement ArrayableInterface.');
     }
 }

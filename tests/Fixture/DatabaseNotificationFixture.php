@@ -10,20 +10,21 @@ declare(strict_types=1);
 
 namespace SN\Notifications\Tests\Fixture;
 
+use SN\Notifications\Contracts\ArrayableInterface;
 use SN\Notifications\Contracts\NotifiableInterface;
 use SN\Notifications\Contracts\NotificationInterface;
 
 /**
  * @author Steve Nebes <steve@nebes.net>
  */
-class DatabaseNotificationFixture implements NotificationInterface
+class DatabaseNotificationFixture implements NotificationInterface, ArrayableInterface
 {
     public function via(NotifiableInterface $notifiable): array
     {
         return ['database'];
     }
 
-    public function toDatabase(NotifiableInterface $notifiable): array
+    public function toArray(NotifiableInterface $notifiable): array
     {
         return ['foo' => 'bar'];
     }

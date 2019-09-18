@@ -14,9 +14,9 @@ use Doctrine\ORM\EntityManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use SN\Notifications\Channel\DatabaseChannel;
+use SN\Notifications\Contracts\DatabaseNotificationInterface;
 use SN\Notifications\Model\DatabaseNotification;
 use SN\Notifications\Event\NotificationSendEvent;
-use SN\Notifications\Model\DatabaseNotificationInterface;
 use SN\Notifications\NotificationEvents;
 use SN\Notifications\Tests\Fixture\BadDatabaseNotificationFixture;
 use SN\Notifications\Tests\Fixture\DatabaseNotificationFixture;
@@ -71,7 +71,7 @@ class DatabaseChannelTest extends TestCase
 
     public function testBadNotification()
     {
-        $this->expectException(\RuntimeException::class);
+        $this->expectException(\Exception::class);
 
         $notification = new BadDatabaseNotificationFixture();
         /** @var MockObject|NotifiableFixture $notifiable */
@@ -108,7 +108,7 @@ class DatabaseChannelTest extends TestCase
 
     public function testWrongClass(): void
     {
-        $this->expectException(\RuntimeException::class);
+        $this->expectException(\Exception::class);
 
         $notifiable = new NotifiableFixture();
         $notification = new NotificationFixture();

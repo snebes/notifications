@@ -11,6 +11,7 @@ declare(strict_types=1);
 namespace SN\Notifications\Model;
 
 use DateTime;
+use SN\Notifications\Contracts\DatabaseNotificationInterface;
 
 /**
  * Database DatabaseNotification
