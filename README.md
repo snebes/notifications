@@ -7,9 +7,16 @@
 ![Scrutinizer code quality](https://img.shields.io/scrutinizer/quality/g/snebes/notifications?logo=scrutinizer)
 ![Scrutinizer coverage](https://img.shields.io/scrutinizer/coverage/g/snebes/notifications)
 
-## Introduction
+`snebes/notifications` is an abstraction layer, inspired by [Laravel](https://laravel.com), which allows you to easily add support for email and web-interface messaging.
 
-`snebes/notifications` provides support for sending notifications across a variety of delivery channels, including mail, SMS†, and Slack†. Notifications can also be stored in a database so that they may be displayed in your web interface.
+## Prerequisites
 
-† Support for these channels coming soon.
+This bundle utilizes Symfony 3.4+ components as well as `SwiftMailer` to provide notifications.
 
+## Installation
+
+Add `snebes/notifications` to your `composer.json` file:
+
+```shell script
+composer require snebes/notifications
+```
