@@ -1,6 +1,7 @@
 # Notifications
 
 [![PHP Version](https://img.shields.io/packagist/php-v/snebes/notifications.svg?maxAge=3600)](https://packagist.org/packages/snebes/notifications)
+[![GitHub license](https://img.shields.io/github/license/snebes/notifications)](https://github.com/snebes/notifications/blob/master/LICENSE)
 [![Latest Version](https://img.shields.io/packagist/v/snebes/notifications.svg?maxAge=3600)](https://packagist.org/packages/snebes/notifications)
 [![Build Status](https://scrutinizer-ci.com/g/snebes/notifications/badges/build.png?b=master)](https://scrutinizer-ci.com/g/snebes/notifications/build-status/master)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/snebes/notifications/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/snebes/notifications/?branch=master)
