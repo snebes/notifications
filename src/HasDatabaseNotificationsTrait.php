@@ -12,7 +12,6 @@ namespace SN\Notifications;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Doctrine\Common\Collections\Criteria;
 use Doctrine\Common\Collections\Selectable;
 use SN\Notifications\Contracts\NotificationInterface;
 use SN\Notifications\Model\DatabaseNotification;
@@ -47,10 +46,10 @@ trait HasDatabaseNotificationsTrait
     {
         /** @var Selectable $notifications */
         $notifications = $this->getNotifications();
-        $criteria = Criteria::create();
-        $criteria->where($criteria->expr()->neq('readAt', null));
 
-        return $notifications->matching($criteria)->toArray();
+        return $notifications->filter(function (DatabaseNotification $notification) {
+            return null !== $notification->getReadAt();
+        })->toArray();
     }
 
     /**
@@ -62,9 +61,9 @@ trait HasDatabaseNotificationsTrait
     {
         /** @var Selectable $notifications */
         $notifications = $this->getNotifications();
-        $criteria = Criteria::create();
-        $criteria->where($criteria->expr()->eq('readAt', null));
 
-        return $notifications->matching($criteria)->toArray();
+        return $notifications->filter(function (DatabaseNotification $notification) {
+            return null === $notification->getReadAt();
+        })->toArray();
     }
 }
