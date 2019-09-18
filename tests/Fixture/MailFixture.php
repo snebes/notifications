@@ -10,6 +10,8 @@ declare(strict_types=1);
 
 namespace SN\Notifications\Tests\Fixture;
 
+use SN\Notifications\Contracts\EmailInterface;
+use SN\Notifications\Contracts\MailableInterface;
 use SN\Notifications\Contracts\NotifiableInterface;
 use SN\Notifications\Contracts\NotificationInterface;
 use SN\Notifications\Email\Email;
@@ -17,14 +19,14 @@ use SN\Notifications\Email\Email;
 /**
  * @author Steve Nebes <steve@nebes.net>
  */
-class MailFixture implements NotificationInterface
+class MailFixture implements NotificationInterface, MailableInterface
 {
     public function via(NotifiableInterface $notifiable): array
     {
         return ['mail'];
     }
 
-    public function toMail(NotifiableInterface $notifiable): Email
+    public function toMail(NotifiableInterface $notifiable): EmailInterface
     {
         return (new Email())
             ->from('steve@nebes.net')

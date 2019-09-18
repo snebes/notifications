@@ -12,6 +12,7 @@ namespace SN\Notifications\Channel;
 
 use SN\Notifications\Contracts\ChannelInterface;
 use SN\Notifications\Contracts\EmailInterface;
+use SN\Notifications\Contracts\MailableInterface;
 use SN\Notifications\Contracts\MailerInterface;
 use SN\Notifications\Contracts\NotifiableInterface;
 use SN\Notifications\Contracts\NotificationInterface;
@@ -20,6 +21,7 @@ use SN\Notifications\NotificationEvents;
 
 /**
  * @author Steve Nebes <steve@nebes.net>
+ * @internal
  */
 class MailChannel implements ChannelInterface
 {
@@ -91,13 +93,8 @@ class MailChannel implements ChannelInterface
      */
     protected function getData(NotifiableInterface $notifiable, NotificationInterface $notification): EmailInterface
     {
-        if (\method_exists($notification, 'toMail')) {
+        if ($notification instanceof MailableInterface) {
             $email = $notification->toMail($notifiable);
-
-            if (!$email instanceof EmailInterface) {
-                throw new \RuntimeException('toMail should return an EmailInterface object.');
-            }
-
             $toEmail = $notifiable->routeNotificationFor('mail', $notification);
 
             if (empty($toEmail) && empty($email->getTo())) {
@@ -111,6 +108,7 @@ class MailChannel implements ChannelInterface
             return $email;
         }
 
-        throw new \RuntimeException('DatabaseNotification is missing toMail method.');
+        throw new \RuntimeException(
+            \sprintf('%s must also implement %s.', NotificationInterface::class, MailableInterface::class));
     }
 }
