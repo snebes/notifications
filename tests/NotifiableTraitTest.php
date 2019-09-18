@@ -11,7 +11,10 @@ declare(strict_types=1);
 namespace SN\Notifications\Tests;
 
 use PHPUnit\Framework\TestCase;
+use SN\Notifications\Model\DatabaseNotification;
+use SN\Notifications\Tests\Fixture\DatabaseNotificationFixture;
 use SN\Notifications\Tests\Fixture\NotifiableFixture;
+use SN\Notifications\Tests\Fixture\NotificationFixture;
 
 /**
  * @author Steve Nebes <steve@nebes.net>
@@ -58,11 +61,20 @@ class NotifiableTraitTest extends TestCase
     {
         $instance = new NotifiableFixture();
         $this->assertCount(0, $instance->getReadNotifications());
+
+        $fixture = new DatabaseNotification();
+        $fixture->setReadAt(new \DateTime());
+        $instance->getNotifications()->add($fixture);
+        $this->assertCount(1, $instance->getReadNotifications());
     }
 
     public function testDatabaseUnreadNotifications(): void
     {
         $instance = new NotifiableFixture();
         $this->assertCount(0, $instance->getUnreadNotifications());
+
+        $fixture = new DatabaseNotification();
+        $instance->getNotifications()->add($fixture);
+        $this->assertCount(1, $instance->getUnreadNotifications());
     }
 }
