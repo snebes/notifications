@@ -58,7 +58,7 @@ class MailChannelTest extends TestCase
 
     public function testNoSenderNotification()
     {
-        $this->expectException(\RuntimeException::class);
+        $this->expectException(\Exception::class);
 
         $notification = new MailFixture();
         $notifiable = new NotifiableFixture();
@@ -76,7 +76,7 @@ class MailChannelTest extends TestCase
 
     public function testBadNotification1()
     {
-        $this->expectException(\RuntimeException::class);
+        $this->expectException(\Exception::class);
 
         $notifiable = new NotifiableFixture();
         $notification = new BadMailFixture();
@@ -91,7 +91,7 @@ class MailChannelTest extends TestCase
 
     public function testBadNotification2()
     {
-        $this->expectException(\RuntimeException::class);
+        $this->expectException(\Exception::class);
 
         $notifiable = new NotifiableFixture();
         $notification = new NotificationFixture();
